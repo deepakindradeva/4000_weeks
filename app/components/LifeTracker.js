@@ -967,7 +967,8 @@ export default function LifeTracker() {
         <motion.div
           className="lt-auth-teaser"
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
+          whileInView={{ opacity: 1 }}
+          viewport={VP}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <div className="lt-auth-icon">✓</div>

@@ -2,11 +2,16 @@
 
 import { motion } from "framer-motion";
 
-export default function ParallaxQuote({ quote, highlight, attribution }) {
+export default function ParallaxQuote({
+  quote,
+  highlight,
+  attribution,
+  variant = "default",
+}) {
   const parts = quote.split(highlight);
 
   return (
-    <div className="parallax-section">
+    <div className={`parallax-section parallax-section--${variant}`}>
       <motion.div
         className="parallax-content"
         initial={{ opacity: 0, y: 30 }}

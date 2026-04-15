@@ -3,10 +3,14 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { getCurrentUser, signInWithRedirect, signOut as amplifySignOut, fetchUserAttributes } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext(null);
+const AUTH_ACTIVE = process.env.NEXT_PUBLIC_AUTHENTICATION_ACTIVE !== "false";
+const DUMMY_AUTH_ENABLED = !AUTH_ACTIVE;
 
 export function AuthProvider({ children }) {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   // Track initial session check so we don't flash "logged out" on page load.
@@ -14,6 +18,11 @@ export function AuthProvider({ children }) {
 
   // Check for an existing session on mount.
   useEffect(() => {
+    if (DUMMY_AUTH_ENABLED) {
+      setIsLoading(false);
+      return;
+    }
+
     async function loadSession() {
       try {
         await getCurrentUser();
@@ -31,6 +40,8 @@ export function AuthProvider({ children }) {
 
   // Listen for Amplify Hub auth events (login / logout / token refresh).
   useEffect(() => {
+    if (DUMMY_AUTH_ENABLED) return;
+
     const unsubscribe = Hub.listen("auth", ({ payload }) => {
       switch (payload.event) {
         case "signInWithRedirect":
@@ -58,12 +69,34 @@ export function AuthProvider({ children }) {
 
   const signInWithGoogle = useCallback(async () => {
     setIsLoggingIn(true);
+
+    if (DUMMY_AUTH_ENABLED) {
+      router.push("/auth/dummy");
+      return;
+    }
+
     // Redirect to Cognito Hosted UI → Google OAuth.
     // Control returns via the /auth/callback route.
     await signInWithRedirect({ provider: "Google" });
+  }, [router]);
+
+  const completeDummyLogin = useCallback(() => {
+    setUser({
+      uid: "dummy-user",
+      email: "demo@4000weeks.app",
+      displayName: "Demo User",
+      photoURL: null,
+    });
+    setIsLoggingIn(false);
   }, []);
 
   const signOut = useCallback(async () => {
+    if (DUMMY_AUTH_ENABLED) {
+      setUser(null);
+      setIsLoggingIn(false);
+      return;
+    }
+
     setIsLoggingIn(true);
     await amplifySignOut();
     // Hub "signedOut" event will clear the user state.
@@ -77,7 +110,10 @@ export function AuthProvider({ children }) {
         isLoggingIn,
         isLoading,
         signInWithGoogle,
+        completeDummyLogin,
         signOut,
+        isAuthenticationActive: AUTH_ACTIVE,
+        isDummyAuthEnabled: DUMMY_AUTH_ENABLED,
       }}
     >
       {children}

@@ -20,9 +20,9 @@ export default function AuthCallbackPage() {
   const { isLoggedIn, isLoading } = useAuth();
 
   useEffect(() => {
-    // Once Amplify has resolved the session, navigate home.
+    // Once Amplify has resolved the session, navigate accordingly.
     if (!isLoading) {
-      router.replace("/");
+      router.replace(isLoggedIn ? "/home" : "/");
     }
   }, [isLoading, isLoggedIn, router]);
 

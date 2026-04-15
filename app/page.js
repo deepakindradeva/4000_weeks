@@ -23,6 +23,7 @@ export default function Home() {
         quote="The trouble with attempting to master your time is that time ends up mastering you."
         highlight="time ends up mastering you"
         attribution="Oliver Burkeman"
+        variant="mastery"
       />
 
       <KeyIdeas />
@@ -31,6 +32,7 @@ export default function Home() {
         quote="If you didn't have to decide what to miss out on, your choices couldn't truly mean anything."
         highlight="your choices couldn't truly mean anything"
         attribution="Four Thousand Weeks"
+        variant="meaning"
       />
 
       <Tools />

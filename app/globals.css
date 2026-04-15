@@ -722,13 +722,27 @@ body {
    ============================================ */
 .parallax-section {
   position: relative;
-  padding: 36px 24px;
+  min-height: 100svh;
+  padding: 76px 24px 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.parallax-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 55% at 50% 45%,
+    var(--parallax-glow, rgba(41, 151, 255, 0.08)) 0%,
+    transparent 72%
+  );
+  pointer-events: none;
 }
 
 .parallax-sticky {
@@ -738,6 +752,8 @@ body {
 }
 
 .parallax-content {
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: 24px;
   max-width: 900px;
@@ -753,7 +769,11 @@ body {
 }
 
 .parallax-content .big-quote .highlight {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-violet));
+  background: linear-gradient(
+    135deg,
+    var(--parallax-highlight-start, var(--color-accent)),
+    var(--parallax-highlight-end, var(--color-accent-violet))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -762,8 +782,22 @@ body {
 .parallax-content .quote-attribution {
   margin-top: 16px;
   font-size: 14px;
-  color: var(--color-text-tertiary);
+  color: var(--parallax-attribution, var(--color-text-tertiary));
   font-weight: 400;
+}
+
+.parallax-section--mastery {
+  --parallax-glow: rgba(41, 151, 255, 0.12);
+  --parallax-highlight-start: #5eb8ff;
+  --parallax-highlight-end: #8cc8ff;
+  --parallax-attribution: #9ec9f3;
+}
+
+.parallax-section--meaning {
+  --parallax-glow: rgba(232, 197, 71, 0.12);
+  --parallax-highlight-start: #ffe083;
+  --parallax-highlight-end: #ffbb55;
+  --parallax-attribution: #e8c547;
 }
 
 /* ============================================
@@ -2103,13 +2137,21 @@ body {
   background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
-  padding: 36px 24px;
+  min-height: 100svh;
+  padding: 76px 24px 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-rotator-section .section-inner {
+  width: 100%;
 }
 
 .qr-container {
   max-width: 740px;
   margin: 20px auto 0;
-  min-height: 160px;
+  min-height: 220px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2889,6 +2931,268 @@ textarea:focus-visible {
 .sc-btn-copy:hover {
   background: var(--color-surface-hover);
   border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ============================================
+   USER HOME (POST-LOGIN)
+   ============================================ */
+.user-home {
+  min-height: 100svh;
+  background: var(--color-bg);
+}
+
+.user-home-inner {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.user-home-hero {
+  position: relative;
+  min-height: 68svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.user-home-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 48% 20%, rgba(41, 151, 255, 0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 80% 70%, rgba(232, 197, 71, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.user-home-kicker {
+  position: relative;
+  z-index: 1;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-gold);
+  margin-bottom: 16px;
+}
+
+.user-home-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 900px;
+}
+
+.user-home-subtitle {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  max-width: 740px;
+  font-size: clamp(16px, 2vw, 21px);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.user-home-meta {
+  position: relative;
+  z-index: 1;
+  margin-top: 24px;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+}
+
+.user-home-returning-row {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-home-questions {
+  padding: 54px 0 72px;
+}
+
+.user-question-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+
+.user-question-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.user-question-input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-primary);
+  padding: 13px 14px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+.user-question-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.user-question-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(41, 151, 255, 0.15);
+  outline: none;
+}
+
+.user-question-textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.user-home-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-home-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.user-summary-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.user-summary-label {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.user-summary-value {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.user-home-save,
+.user-home-ghost {
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  padding: 12px 18px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.user-home-save {
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-accent-violet), var(--color-accent));
+  border-color: transparent;
+}
+
+.user-home-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 26px rgba(41, 151, 255, 0.3);
+}
+
+.user-home-ghost {
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.user-home-ghost:hover {
+  color: var(--color-text-primary);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ============================================
+   DUMMY AUTH SCREEN
+   ============================================ */
+.dummy-auth-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 35%, rgba(41, 151, 255, 0.16) 0%, transparent 72%),
+    radial-gradient(ellipse 45% 40% at 20% 80%, rgba(191, 90, 242, 0.12) 0%, transparent 65%),
+    var(--color-bg);
+}
+
+.dummy-auth-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 44px 36px;
+  border-radius: 24px;
+  background: rgba(17, 17, 17, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  text-align: center;
+}
+
+.dummy-auth-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--color-accent);
+  animation: spin 0.9s linear infinite;
+}
+
+.dummy-auth-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-gold);
+  margin-bottom: 12px;
+}
+
+.dummy-auth-title {
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.dummy-auth-subtitle {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
 }
 
 @media (max-width: 768px) {
