@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import WikipediaLifeLens from "../components/WikipediaLifeLens";
 
 const INTENTIONS_KEY = "4000weeks_user_intentions_v1";
 
@@ -97,6 +98,7 @@ export default function UserHomePage() {
     () => Object.values(answers).filter((v) => v.trim().length > 0).length,
     [answers]
   );
+  const isOnboardingView = !onboardingComplete || isEditingOnboarding;
 
   const handleChange = (id, value) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -118,8 +120,8 @@ export default function UserHomePage() {
   if (isLoading || !isLoggedIn) return null;
 
   return (
-    <main className="user-home">
-      <section className="user-home-hero">
+    <main className={`user-home ${isOnboardingView ? "user-home--onboarding" : "user-home--returning"}`}>
+      <section className={`user-home-hero ${isOnboardingView ? "user-home-hero--onboarding" : "user-home-hero--returning"}`}>
         <div className="user-home-hero-bg" />
         <div className="user-home-inner">
           <motion.p
@@ -136,7 +138,9 @@ export default function UserHomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
           >
-            Choose what matters in your finite weeks.
+            {isOnboardingView
+              ? "Choose what matters in your finite weeks."
+              : "Your finite-week dashboard is ready."}
           </motion.h1>
           <motion.p
             className="user-home-subtitle"
@@ -144,8 +148,9 @@ export default function UserHomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.12 }}
           >
-            Inspired by Four Thousand Weeks, this page turns ideas into choices:
-            limits, trade-offs, and intentional focus.
+            {isOnboardingView
+              ? "Inspired by Four Thousand Weeks, this page turns ideas into choices: limits, trade-offs, and intentional focus."
+              : "You already completed onboarding. Review your commitments, keep them alive, and revise only when needed."}
           </motion.p>
           <motion.div
             className="user-home-meta"
@@ -157,7 +162,7 @@ export default function UserHomePage() {
             <span>•</span>
             <span>{savedAt ? `Saved ${new Date(savedAt).toLocaleString()}` : "Not saved yet"}</span>
           </motion.div>
-          {onboardingComplete && !isEditingOnboarding && (
+          {!isOnboardingView && (
             <motion.div
               className="user-home-returning-row"
               initial={{ opacity: 0, y: 12 }}
@@ -180,8 +185,12 @@ export default function UserHomePage() {
 
       <section className="user-home-questions">
         <div className="user-home-inner">
-          {!onboardingComplete || isEditingOnboarding ? (
+          {isOnboardingView ? (
             <>
+              <div className="user-home-section-intro">
+                <h2>First-time setup</h2>
+                <p>Answer these once to define your direction. You can edit later anytime.</p>
+              </div>
               {QUESTIONS.map((q, idx) => (
                 <motion.div
                   key={q.id}
@@ -234,17 +243,42 @@ export default function UserHomePage() {
               </div>
             </>
           ) : (
-            <div className="user-home-summary-grid">
-              {QUESTIONS.filter((q) => answers[q.id]?.trim()).map((q) => (
-                <div key={q.id} className="user-summary-card">
-                  <p className="user-summary-label">{q.label}</p>
-                  <p className="user-summary-value">{answers[q.id]}</p>
+            <>
+              <div className="user-home-dashboard-cards">
+                <div className="user-dashboard-card">
+                  <p className="user-summary-label">Primary 12-week focus</p>
+                  <p className="user-summary-value">
+                    {answers.focus_12_weeks || "Set this in onboarding."}
+                  </p>
                 </div>
-              ))}
-            </div>
+                <div className="user-dashboard-card">
+                  <p className="user-summary-label">Intentional neglect</p>
+                  <p className="user-summary-value">
+                    {answers.intentional_neglect || "Set this in onboarding."}
+                  </p>
+                </div>
+                <div className="user-dashboard-card">
+                  <p className="user-summary-label">Weekly reflection ritual</p>
+                  <p className="user-summary-value">
+                    {answers.weekly_reflection_ritual || "Set this in onboarding."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="user-home-summary-grid">
+                {QUESTIONS.filter((q) => answers[q.id]?.trim()).map((q) => (
+                  <div key={q.id} className="user-summary-card">
+                    <p className="user-summary-label">{q.label}</p>
+                    <p className="user-summary-value">{answers[q.id]}</p>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
+
+      <WikipediaLifeLens />
     </main>
   );
 }
