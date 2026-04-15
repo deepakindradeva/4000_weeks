@@ -1,6 +1,7 @@
 import "./globals.css";
 import { UserProvider } from "./context/UserContext";
 import { AuthProvider } from "./context/AuthContext";
+import AmplifyInit from "./components/AmplifyInit";
 
 export const metadata = {
   title: "4,000 Weeks — Time Management for Mortals",
@@ -17,9 +18,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <UserProvider>{children}</UserProvider>
-        </AuthProvider>
+        <AmplifyInit>
+          <AuthProvider>
+            <UserProvider>{children}</UserProvider>
+          </AuthProvider>
+        </AmplifyInit>
       </body>
     </html>
   );
