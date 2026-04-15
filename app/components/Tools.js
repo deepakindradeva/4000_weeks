@@ -6,43 +6,65 @@ import { motion, useInView } from "framer-motion";
 const tools = [
   {
     title: "Fixed-Volume Productivity",
-    desc: "Establish predetermined time boundaries for your daily work. Don't let work expand to fill all available time.",
+    desc: "Set hard time limits for work. Don't let it expand to fill every hour.",
+    icon: "⏱",
+    color: "#2997ff",
   },
   {
     title: "Serialize, Don't Parallelize",
-    desc: "Focus on one big project at a time. Resist the temptation to juggle multiple priorities simultaneously.",
-  },
-  {
-    title: "Decide What to Fail At",
-    desc: "Strategically choose which areas of life to underperform in, so you can excel where it matters most.",
-  },
-  {
-    title: "Keep a 'Done' List",
-    desc: "Focus on what you've already completed, not just on what's left. Celebrate progress instead of fixating on the gap.",
-  },
-  {
-    title: "Consolidate Your Caring",
-    desc: "You can't care equally about everything. Consciously choose which causes, relationships, and projects to devote your energy to.",
+    desc: "One big project at a time. Juggling splits focus — and life.",
+    icon: "🎯",
+    color: "#bf5af2",
   },
   {
     title: "Embrace Boring Technology",
-    desc: "Seek out single-purpose tools. The most productive technology is the kind that doesn't tempt you with distractions.",
+    desc: "Single-purpose tools win. The best tech doesn't tempt you away.",
+    icon: "🔧",
+    color: "#30d5c8",
+  },
+  {
+    title: "Decide What to Fail At",
+    desc: "Strategically underperform in less-important areas so you can excel where it counts.",
+    icon: "✂️",
+    color: "#ff375f",
+    wide: true,
+  },
+  {
+    title: "Keep a 'Done' List",
+    desc: "Track completions, not just tasks left. Progress compounds.",
+    icon: "✅",
+    color: "#e8c547",
+  },
+  {
+    title: "Consolidate Your Caring",
+    desc: "You can't care equally about everything. Choose deliberately.",
+    icon: "💎",
+    color: "#ff6b35",
   },
   {
     title: "Find Novelty in the Mundane",
-    desc: "Pay more attention to every moment. The extraordinary hides in the ordinary—you just have to look for it.",
+    desc: "Pay close attention. The extraordinary hides inside the ordinary.",
+    icon: "👁",
+    color: "#64d2ff",
   },
   {
     title: "Be a Researcher in Relationships",
-    desc: "Deliberately adopt an attitude of curiosity. Approach the people in your life as though you're discovering them for the first time.",
+    desc: "Approach people with genuine curiosity — as if meeting them fresh.",
+    icon: "🧪",
+    color: "#5e5ce6",
   },
   {
     title: "Cultivate Instant Generosity",
-    desc: "Whenever a generous impulse arises, act on it immediately. Don't defer kindness to a more convenient time.",
+    desc: "When a generous impulse arrives, act on it now. Not later.",
+    icon: "🎁",
+    color: "#30d5c8",
   },
   {
     title: "Practice Doing Nothing",
-    desc: "Resist the urge to fill every moment with productivity. Sometimes the most radical act is to simply be.",
+    desc: "Sometimes the most radical act is to simply stop and be present with your finite life.",
+    icon: "🌿",
+    color: "#a8e6cf",
+    wide: true,
   },
 ];
 
@@ -75,30 +97,31 @@ export default function Tools() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         >
-          By accepting the truth about limited time, you can be more
-          intentional about accomplishing the things that matter.
+          Accept limited time → be intentional about what actually matters.
         </motion.p>
 
-        <div className="tools-list">
+        <div className="tools-grid">
           {tools.map((tool, i) => (
             <motion.div
               key={i}
-              className="tool-item"
-              initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              className={`tool-card${tool.wide ? " tool-card--wide" : ""}`}
+              style={{ "--tool-color": tool.color }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{
-                duration: 0.6,
+                duration: 0.55,
                 ease: [0.16, 1, 0.3, 1],
-                delay: 0.4 + i * 0.08,
+                delay: 0.35 + i * 0.06,
               }}
             >
-              <div className="tool-number">
-                {String(i + 1).padStart(2, "0")}
+              <div className="tool-card-top">
+                <span className="tool-card-icon">{tool.icon}</span>
+                <span className="tool-card-num">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-              <div className="tool-content">
-                <h3>{tool.title}</h3>
-                <p>{tool.desc}</p>
-              </div>
+              <h3 className="tool-card-title">{tool.title}</h3>
+              <p className="tool-card-desc">{tool.desc}</p>
             </motion.div>
           ))}
         </div>

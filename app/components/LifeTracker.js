@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -314,31 +314,32 @@ function TimelineCard({ event, onEdit, onDelete, index, isPreview }) {
   return (
     <motion.div
       className="lt-timeline-card"
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 30, height: 0, marginBottom: 0, padding: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.05 }}
+      style={{ "--cat-color": cat.color }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: index * 0.04 }}
       layout
     >
-      <div className="lt-card-accent" style={{ background: cat.color }} />
-      <div className="lt-card-body">
-        <div className="lt-card-top">
-          <span className="lt-card-category" style={{ color: cat.color }}>
-            {cat.icon} {cat.label}
-          </span>
-          <span className="lt-card-ago">{timeAgoLabel(event.date)}</span>
-        </div>
-        <h4 className="lt-card-title">{event.title}</h4>
-        {event.description && <p className="lt-card-desc">{event.description}</p>}
-        <div className="lt-card-bottom">
-          <span className="lt-card-date">{formatDate(event.date)}</span>
-          {!isPreview && (
-            <div className="lt-card-actions">
-              <button className="lt-card-btn" onClick={() => onEdit(event)} aria-label="Edit">✎</button>
-              <button className="lt-card-btn lt-card-btn-danger" onClick={() => onDelete(event.id)} aria-label="Delete">✕</button>
-            </div>
-          )}
-        </div>
+      <div className="lt-card-top">
+        <span
+          className="lt-card-cat-pill"
+          style={{ color: cat.color, background: cat.color + "1a" }}
+        >
+          {cat.icon} {cat.label}
+        </span>
+        <span className="lt-card-ago">{timeAgoLabel(event.date)}</span>
+      </div>
+      <h4 className="lt-card-title">{event.title}</h4>
+      {event.description && <p className="lt-card-desc">{event.description}</p>}
+      <div className="lt-card-footer">
+        <span className="lt-card-date">{formatDate(event.date)}</span>
+        {!isPreview && (
+          <div className="lt-card-actions">
+            <button className="lt-card-btn" onClick={() => onEdit(event)} aria-label="Edit">✎</button>
+            <button className="lt-card-btn lt-card-btn-danger" onClick={() => onDelete(event.id)} aria-label="Delete">✕</button>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -348,43 +349,59 @@ function TimelineCard({ event, onEdit, onDelete, index, isPreview }) {
    REFLECTION CARD
    ═══════════════════════════════════════ */
 function ReflectionCard({ reflection, onDelete, index, isPreview }) {
-  const moodEmoji = MOODS.find((m) => m.value === reflection.mood)?.emoji || "😐";
+  const moodMeta = MOODS.find((m) => m.value === reflection.mood) || MOODS[2];
   return (
     <motion.div
       className="lt-timeline-card lt-reflection-card"
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 30 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.05 }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: index * 0.04 }}
       layout
     >
-      <div className="lt-card-accent" style={{ background: "var(--color-accent-gold)" }} />
-      <div className="lt-card-body">
-        <div className="lt-card-top">
-          <span className="lt-card-category" style={{ color: "var(--color-accent-gold)" }}>
-            Week {reflection.weekNumber}
-          </span>
-          <span className="lt-ref-mood">{moodEmoji}</span>
-        </div>
-        <h4 className="lt-card-title lt-ref-word">&ldquo;{reflection.oneWord}&rdquo;</h4>
-        {reflection.highlight && (
-          <p className="lt-card-desc"><strong>Highlight:</strong> {reflection.highlight}</p>
-        )}
-        {reflection.lesson && (
-          <p className="lt-card-desc"><strong>Lesson:</strong> {reflection.lesson}</p>
-        )}
-        {reflection.gratitude && (
-          <p className="lt-card-desc"><strong>Grateful for:</strong> {reflection.gratitude}</p>
-        )}
-        <div className="lt-card-bottom">
-          <span className="lt-card-date">{formatDate(reflection.createdAt)}</span>
-          {!isPreview && (
-            <div className="lt-card-actions">
-              <button className="lt-card-btn lt-card-btn-danger" onClick={() => onDelete(reflection.id)} aria-label="Delete">✕</button>
+      <div className="lt-card-top">
+        <span className="lt-card-cat-pill" style={{ color: "var(--color-accent-gold)", background: "rgba(232,197,71,0.1)" }}>
+          📅 Week {reflection.weekNumber}
+        </span>
+        <span className="lt-card-ago">{formatDate(reflection.createdAt)}</span>
+      </div>
+
+      <div className="lt-ref-hero">
+        <span className="lt-ref-mood-lg">{moodMeta.emoji}</span>
+        <h4 className="lt-ref-word-lg">&ldquo;{reflection.oneWord}&rdquo;</h4>
+      </div>
+
+      {(reflection.highlight || reflection.lesson || reflection.gratitude) && (
+        <div className="lt-ref-details">
+          {reflection.highlight && (
+            <div className="lt-ref-detail">
+              <span className="lt-ref-detail-icon">✨</span>
+              <span>{reflection.highlight}</span>
+            </div>
+          )}
+          {reflection.lesson && (
+            <div className="lt-ref-detail">
+              <span className="lt-ref-detail-icon">💡</span>
+              <span>{reflection.lesson}</span>
+            </div>
+          )}
+          {reflection.gratitude && (
+            <div className="lt-ref-detail">
+              <span className="lt-ref-detail-icon">🙏</span>
+              <span>{reflection.gratitude}</span>
             </div>
           )}
         </div>
-      </div>
+      )}
+
+      {!isPreview && (
+        <div className="lt-card-footer" style={{ marginTop: 12 }}>
+          <div />
+          <div className="lt-card-actions">
+            <button className="lt-card-btn lt-card-btn-danger" onClick={() => onDelete(reflection.id)} aria-label="Delete">✕</button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -472,7 +489,6 @@ function TrackerContent({
   setFilterCategory,
   activeTab,
   setActiveTab,
-  isInView,
   signInWithGoogle,
   isLoggingIn,
 }) {
@@ -486,9 +502,10 @@ function TrackerContent({
       {/* Tabs */}
       <motion.div
         className="lt-tabs"
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.35 }}
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
       >
         <button
           className={`lt-tab ${activeTab === "milestones" ? "active" : ""}`}
@@ -578,7 +595,7 @@ function TrackerContent({
             </div>
           )}
 
-          <div className="lt-timeline">
+          <div className="lt-timeline lt-timeline--milestones">
             <AnimatePresence mode="popLayout">
               {filteredEvents.map((event, i) => (
                 <TimelineCard
@@ -657,7 +674,7 @@ function TrackerContent({
             </div>
           )}
 
-          <div className="lt-timeline">
+          <div className="lt-timeline lt-timeline--reflections">
             <AnimatePresence mode="popLayout">
               {reflections.map((r, i) => (
                 <ReflectionCard
@@ -680,8 +697,6 @@ function TrackerContent({
    MAIN TRACKER COMPONENT
    ═══════════════════════════════════════ */
 export default function LifeTracker() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
   const { lifeData } = useUser();
   const { isLoggedIn, signInWithGoogle, isLoggingIn } = useAuth();
 
@@ -768,25 +783,29 @@ export default function LifeTracker() {
   };
 
   // ─── PREVIEW MODE (not signed in) ────────────────────────────────────────
+  const VP = { once: true, amount: 0.2 };
+
   if (!isLoggedIn) {
     return (
-      <section className="section lt-section" id="life-tracker" ref={ref}>
+      <section className="section lt-section" id="life-tracker">
         <div className="section-inner">
           <motion.div
             className="section-label"
             style={{ color: "var(--color-accent-violet)" }}
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             Your Story
           </motion.div>
 
           <motion.h2
             className="section-heading"
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
             Track the moments that define your weeks.
           </motion.h2>
@@ -794,17 +813,49 @@ export default function LifeTracker() {
           <motion.p
             className="section-body"
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
             Life isn&apos;t just counted in weeks—it&apos;s measured by the changes,
             achievements, and turning points along the way.
           </motion.p>
 
           <motion.div
+            className="lt-tracker-hero"
             initial={{ opacity: 0, y: 16 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="lt-tracker-hero-stat">
+              <span className="lt-tracker-hero-num">{demoEventStats.total}</span>
+              <span className="lt-tracker-hero-label">Moments logged</span>
+            </div>
+            <div className="lt-tracker-hero-div" />
+            <div className="lt-tracker-hero-stat">
+              <span className="lt-tracker-hero-num" style={{ color: "var(--color-accent-warm)" }}>🔥 {demoRefStats.streak}</span>
+              <span className="lt-tracker-hero-label">Week streak</span>
+            </div>
+            <div className="lt-tracker-hero-div" />
+            <div className="lt-tracker-hero-stat">
+              <span className="lt-tracker-hero-num">{demoRefStats.total}</span>
+              <span className="lt-tracker-hero-label">Reflections</span>
+            </div>
+            <div className="lt-tracker-hero-div" />
+            <div className="lt-tracker-hero-stat">
+              <span className="lt-tracker-hero-num" style={{ color: "var(--color-accent-gold)" }}>
+                {MOODS.find(m => m.value === Math.round(demoRefStats.avgMood))?.emoji} {demoRefStats.avgMood}
+              </span>
+              <span className="lt-tracker-hero-label">Avg mood</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
             <DemoBanner onSignIn={signInWithGoogle} isLoggingIn={isLoggingIn} />
           </motion.div>
@@ -820,7 +871,6 @@ export default function LifeTracker() {
             setFilterCategory={setFilterCategory}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            isInView={isInView}
             signInWithGoogle={signInWithGoogle}
             isLoggingIn={isLoggingIn}
           />
@@ -831,23 +881,25 @@ export default function LifeTracker() {
 
   // ─── REAL MODE (signed in) ────────────────────────────────────────────────
   return (
-    <section className="section lt-section" id="life-tracker" ref={ref}>
+    <section className="section lt-section" id="life-tracker">
       <div className="section-inner">
         <motion.div
           className="section-label"
           style={{ color: "var(--color-accent-violet)" }}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           Your Story
         </motion.div>
 
         <motion.h2
           className="section-heading"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
           Track the moments that define your weeks.
         </motion.h2>
@@ -855,12 +907,43 @@ export default function LifeTracker() {
         <motion.p
           className="section-body"
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
           Life isn&apos;t just counted in weeks—it&apos;s measured by the changes,
           achievements, and turning points along the way.
         </motion.p>
+
+        <motion.div
+          className="lt-tracker-hero"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div className="lt-tracker-hero-stat">
+            <span className="lt-tracker-hero-num">{eventStats.total || 0}</span>
+            <span className="lt-tracker-hero-label">Moments logged</span>
+          </div>
+          <div className="lt-tracker-hero-div" />
+          <div className="lt-tracker-hero-stat">
+            <span className="lt-tracker-hero-num" style={{ color: "var(--color-accent-warm)" }}>
+              {refStats.streak > 0 ? `🔥 ${refStats.streak}` : "—"}
+            </span>
+            <span className="lt-tracker-hero-label">Week streak</span>
+          </div>
+          <div className="lt-tracker-hero-div" />
+          <div className="lt-tracker-hero-stat">
+            <span className="lt-tracker-hero-num">{refStats.total || 0}</span>
+            <span className="lt-tracker-hero-label">Reflections</span>
+          </div>
+          <div className="lt-tracker-hero-div" />
+          <div className="lt-tracker-hero-stat">
+            <span className="lt-tracker-hero-num">Week {currentWeek.toLocaleString()}</span>
+            <span className="lt-tracker-hero-label">You are here</span>
+          </div>
+        </motion.div>
 
         <TrackerContent
           events={events}
@@ -878,7 +961,6 @@ export default function LifeTracker() {
           setFilterCategory={setFilterCategory}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          isInView={isInView}
         />
 
         {/* Signed-in notice */}
