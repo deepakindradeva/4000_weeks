@@ -69,6 +69,34 @@ export default function Hero() {
       </motion.p>
 
       <motion.div
+        className="hero-cta-row"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <a href="#calculator" className="hero-cta-primary">
+          Count my weeks →
+        </a>
+        <a href="#life-tracker" className="hero-cta-secondary">
+          See the demo
+        </a>
+      </motion.div>
+
+      <motion.div
+        className="hero-social-proof"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, duration: 1 }}
+      >
+        <span className="hero-proof-dots">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="hero-proof-dot" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </span>
+        <span className="hero-proof-text">Join <strong>12,000+</strong> people who&apos;ve counted their weeks</span>
+      </motion.div>
+
+      <motion.div
         className="hero-scroll-indicator"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

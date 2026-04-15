@@ -1,4 +1,6 @@
 import "./globals.css";
+import { UserProvider } from "./context/UserContext";
+import { AuthProvider } from "./context/AuthContext";
 
 export const metadata = {
   title: "4,000 Weeks — Time Management for Mortals",
@@ -14,7 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          <UserProvider>{children}</UserProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

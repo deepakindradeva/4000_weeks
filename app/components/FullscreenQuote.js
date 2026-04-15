@@ -1,22 +1,18 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function FullscreenQuote() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0.15, 0.4, 0.6, 0.85], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0.15, 0.4, 0.6, 0.85], [0.92, 1, 1, 0.95]);
-
   return (
-    <section className="fullscreen-quote" ref={ref}>
+    <section className="fullscreen-quote">
       <div className="fullscreen-quote-bg" />
-      <motion.div className="quote-block" style={{ opacity, scale }}>
+      <motion.div
+        className="quote-block"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
         <span className="quote-mark">&ldquo;</span>
         <p className="quote-text">
           The real measure of any time management technique is whether it helps

@@ -1,36 +1,28 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function ParallaxQuote({ quote, highlight, attribution }) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0.1, 0.35, 0.65, 0.9], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0.1, 0.35, 0.65, 0.9], [0.9, 1, 1, 0.9]);
-  const y = useTransform(scrollYProgress, [0.1, 0.35, 0.65, 0.9], [80, 0, 0, -80]);
-
-  // Split text around highlight
   const parts = quote.split(highlight);
 
   return (
-    <div className="parallax-section" ref={ref}>
-      <div className="parallax-sticky">
-        <motion.div className="parallax-content" style={{ opacity, scale, y }}>
-          <p className="big-quote">
-            {parts[0]}
-            <span className="highlight">{highlight}</span>
-            {parts[1]}
-          </p>
-          {attribution && (
-            <p className="quote-attribution">— {attribution}</p>
-          )}
-        </motion.div>
-      </div>
+    <div className="parallax-section">
+      <motion.div
+        className="parallax-content"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <p className="big-quote">
+          {parts[0]}
+          <span className="highlight">{highlight}</span>
+          {parts[1]}
+        </p>
+        {attribution && (
+          <p className="quote-attribution">— {attribution}</p>
+        )}
+      </motion.div>
     </div>
   );
 }
