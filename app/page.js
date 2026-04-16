@@ -6,7 +6,7 @@ import KeyIdeas from "./components/KeyIdeas";
 import Tools from "./components/Tools";
 import FullscreenQuote from "./components/FullscreenQuote";
 import Calculator from "./components/Calculator";
-import Perspectives from "./components/Perspectives";
+import PerspectivesSection from "./components/PerspectivesSection";
 import QuoteRotator from "./components/QuoteRotator";
 import LifeTracker from "./components/LifeTracker";
 import Footer from "./components/Footer";
@@ -41,11 +41,11 @@ export default function Home() {
 
       <Calculator />
 
-      <Perspectives />
-
-      <QuoteRotator />
+      <PerspectivesSection />
 
       <LifeTracker />
+
+      <QuoteRotator />
 
       <Footer />
     </main>

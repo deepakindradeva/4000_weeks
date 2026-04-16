@@ -2245,6 +2245,120 @@ body {
 }
 
 /* ============================================
+   FAMOUS FIGURES SELECTOR (in Perspectives)
+   ============================================ */
+.figures-selector-section {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.figures-selector-intro {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.figures-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.figure-selector-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  text-align: center;
+  appearance: none;
+}
+
+.figure-selector-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: var(--color-surface-hover);
+  transform: translateY(-2px);
+}
+
+.figure-selector-card.active {
+  border-color: var(--color-accent-warm);
+  background: rgba(255, 107, 53, 0.08);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
+}
+
+.figure-selector-image-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.figure-selector-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.figure-selector-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.figure-selector-description {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 400;
+}
+
+.figure-selector-weeks {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.figure-weeks-bar {
+  height: 4px;
+  background: var(--color-surface-hover);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.figure-weeks-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-warm), var(--color-accent-gold));
+  border-radius: 2px;
+  transition: width 0.6s var(--ease-out-expo);
+}
+
+.figure-weeks-text {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================
    QUOTE ROTATOR
    ============================================ */
 .quote-rotator-section {
@@ -2963,23 +3077,20 @@ textarea:focus-visible {
 }
 
 .sc-stats {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   padding: 16px 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 14px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
 .sc-stat {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
-  min-width: 80px;
   text-align: center;
 }
 
@@ -2997,15 +3108,13 @@ textarea:focus-visible {
 }
 
 .sc-stat-div {
-  width: 1px;
-  height: 28px;
-  background: var(--color-border);
+  display: none;
 }
 
 .sc-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .sc-btn {
@@ -3013,17 +3122,17 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 13px 20px;
-  font-size: 14px;
+  padding: 13px 12px;
+  font-size: 13px;
   font-family: var(--font-sans);
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s var(--ease-out-expo);
   text-decoration: none;
-  flex: 1;
   white-space: nowrap;
   border: none;
+  min-height: 44px;
 }
 
 .sc-btn-primary {
@@ -4060,12 +4169,46 @@ textarea:focus-visible {
 
 @media (max-width: 768px) {
   .sc-modal {
-    padding: 28px 20px 24px;
+    padding: 24px 16px 20px;
     border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .sc-header {
+    margin-bottom: 20px;
+  }
+
+  .sc-title {
+    font-size: 18px;
+  }
+
+  .sc-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .sc-stat-value {
+    font-size: 16px;
+  }
+
+  .sc-stat-label {
+    font-size: 10px;
   }
 
   .sc-actions {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .sc-btn {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+
+  .sc-canvas-wrapper {
+    margin-bottom: 16px;
   }
 
   .lt-demo-banner {
@@ -4581,4 +4724,400 @@ textarea:focus-visible {
 .timeline-moment-add-btn span {
   font-size: 16px;
   font-weight: 700;
+}
+
+/* ============================================
+   FIGURE SELECTION GRID
+   ============================================ */
+
+.wiki-figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 32px 0;
+}
+
+.wiki-figure-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  text-align: left;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-figure-card:hover {
+  border-color: var(--color-accent-teal);
+  box-shadow: 0 16px 40px rgba(48, 213, 200, 0.15);
+}
+
+.wiki-figure-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wiki-figure-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(48, 213, 200, 0.1), rgba(41, 151, 255, 0.1));
+}
+
+.wiki-figure-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.wiki-figure-card:hover .wiki-figure-image {
+  transform: scale(1.05);
+}
+
+.wiki-figure-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+.wiki-figure-card:hover .wiki-figure-overlay {
+  opacity: 1;
+}
+
+.wiki-figure-cta {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.wiki-figure-name {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 14px;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.wiki-figure-desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  padding: 0 14px 14px;
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.wiki-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.wiki-loader-spin {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(48, 213, 200, 0.1);
+  border-top-color: var(--color-accent-teal);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.wiki-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+}
+
+.wiki-back-btn:hover {
+  border-color: var(--color-accent-teal);
+  color: var(--color-accent-teal);
+  background: rgba(48, 213, 200, 0.05);
+}
+
+/* ============================================
+   FAMOUS FIGURES PREVIEW (Landing Page)
+   ============================================ */
+
+.famous-figures-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.famous-figures-intro {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.famous-figures-subtitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-teal);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.famous-figures-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.famous-figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.famous-figure-mini-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.famous-figure-mini-card:hover {
+  border-color: var(--color-accent-teal);
+  box-shadow: 0 16px 40px rgba(48, 213, 200, 0.12);
+}
+
+.figure-mini-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(48, 213, 200, 0.1), rgba(41, 151, 255, 0.1));
+}
+
+.figure-mini-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.famous-figure-mini-card:hover .figure-mini-image {
+  transform: scale(1.08);
+}
+
+.figure-mini-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+.famous-figure-mini-card:hover .figure-mini-overlay {
+  opacity: 1;
+}
+
+.figure-mini-stats {
+  display: flex;
+  gap: 24px;
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-value {
+  color: var(--color-accent-gold);
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--font-serif);
+}
+
+.stat-label {
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.figure-mini-name {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 14px 14px 6px;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.figure-mini-desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  padding: 0 14px;
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.figure-mini-progress {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(48, 213, 200, 0.1);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold));
+  border-radius: 999px;
+  box-shadow: 0 0 12px rgba(48, 213, 200, 0.3);
+}
+
+.progress-label {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  text-align: right;
+}
+
+.famous-figures-cta {
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(41, 151, 255, 0.08), rgba(191, 90, 242, 0.06));
+  border: 1px solid rgba(41, 151, 255, 0.15);
+  border-radius: 16px;
+}
+
+.famous-figures-cta p {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.figures-link-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-violet));
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out-expo);
+  letter-spacing: 0.02em;
+}
+
+.figures-link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(41, 151, 255, 0.3);
+}
+
+.figures-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.figures-loader-spin {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(48, 213, 200, 0.1);
+  border-top-color: var(--color-accent-teal);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .famous-figures-section {
+    padding: 56px 0;
+  }
+
+  .famous-figures-intro {
+    margin-bottom: 40px;
+  }
+
+  .famous-figures-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+  }
+
+  .figure-mini-image-wrap {
+    height: 120px;
+  }
+
+  .figure-mini-name {
+    font-size: 14px;
+    padding: 12px 12px 4px;
+  }
+
+  .figure-mini-desc {
+    font-size: 11px;
+    padding: 0 12px;
+  }
+
+  .famous-figures-cta {
+    padding: 24px;
+  }
 }

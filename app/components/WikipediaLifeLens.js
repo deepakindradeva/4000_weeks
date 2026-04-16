@@ -37,6 +37,140 @@ const MOODS = [
   { value: 5, emoji: "😊", label: "Great" },
 ];
 
+// Pre-loaded inspiring figures
+const INSPIRING_FIGURES = [
+  {
+    title: "Maya Angelou",
+    description: "American poet, memoirist, and civil rights activist",
+    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Maya_Angelou_1994.jpg/220px-Maya_Angelou_1994.jpg",
+    articleUrl: "https://en.wikipedia.org/wiki/Maya_Angelou",
+    achievements: [
+      "Author of 'I Know Why the Caged Bird Sings'",
+      "Won the National Medal of Arts",
+      "Served as a civil rights activist and poet",
+    ],
+    timeline: [
+      { year: 1928, text: "Born in St. Louis, Missouri" },
+      { year: 1952, text: "Began career as a professional dancer" },
+      { year: 1969, text: "Published 'I Know Why the Caged Bird Sings'" },
+      { year: 1981, text: "Became professor at Wake Forest University" },
+      { year: 2000, text: "Received the National Medal of Arts" },
+    ],
+    progress: {
+      birthDate: new Date("1928-04-04"),
+      deathDate: new Date("2014-05-28"),
+      weeksLived: 4472,
+      progressPercent: 111.8,
+      isComplete: true,
+      ageYears: 86,
+    },
+  },
+  {
+    title: "Nelson Mandela",
+    description: "South African anti-apartheid revolutionary and first Black president",
+    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Nelson_Mandela-2008_%28edit%29.jpg/220px-Nelson_Mandela-2008_%28edit%29.jpg",
+    articleUrl: "https://en.wikipedia.org/wiki/Nelson_Mandela",
+    achievements: [
+      "Led South Africa's anti-apartheid movement",
+      "Became first Black president of South Africa",
+      "Won the Nobel Peace Prize",
+    ],
+    timeline: [
+      { year: 1918, text: "Born in Umtata, South Africa" },
+      { year: 1944, text: "Joined the African National Congress" },
+      { year: 1962, text: "Arrested and imprisoned" },
+      { year: 1990, text: "Released after 27 years in prison" },
+      { year: 1994, text: "Elected first Black president of South Africa" },
+    ],
+    progress: {
+      birthDate: new Date("1918-07-18"),
+      deathDate: new Date("2013-12-05"),
+      weeksLived: 4948,
+      progressPercent: 123.7,
+      isComplete: true,
+      ageYears: 95,
+    },
+  },
+  {
+    title: "Marie Curie",
+    description: "Polish physicist and chemist, pioneer of radioactivity research",
+    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Marie_Curie_c._1920s.jpg/220px-Marie_Curie_c._1920s.jpg",
+    articleUrl: "https://en.wikipedia.org/wiki/Marie_Curie",
+    achievements: [
+      "First woman to win a Nobel Prize",
+      "First person to win Nobel Prizes in two fields",
+      "Discovered polonium and radium",
+    ],
+    timeline: [
+      { year: 1867, text: "Born in Warsaw, Poland" },
+      { year: 1891, text: "Enrolled at the University of Paris" },
+      { year: 1903, text: "Won first Nobel Prize in Physics" },
+      { year: 1911, text: "Won Nobel Prize in Chemistry" },
+      { year: 1934, text: "Published her autobiography" },
+    ],
+    progress: {
+      birthDate: new Date("1867-11-24"),
+      deathDate: new Date("1934-07-04"),
+      weeksLived: 3473,
+      progressPercent: 86.8,
+      isComplete: true,
+      ageYears: 66,
+    },
+  },
+  {
+    title: "Steve Jobs",
+    description: "Co-founder of Apple Computer and pioneer of personal computing",
+    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/220px-Camponotus_flavomarginatus_ant.jpg",
+    articleUrl: "https://en.wikipedia.org/wiki/Steve_Jobs",
+    achievements: [
+      "Co-founded Apple Computer with Steve Wozniak",
+      "Introduced the Macintosh, iMac, iPhone, and iPad",
+      "Revolutionized personal computing and digital media",
+    ],
+    timeline: [
+      { year: 1955, text: "Born in Los Angeles, California" },
+      { year: 1976, text: "Co-founded Apple Computer" },
+      { year: 1984, text: "Introduced the Macintosh" },
+      { year: 2001, text: "Unveiled the iPod" },
+      { year: 2007, text: "Unveiled the iPhone" },
+    ],
+    progress: {
+      birthDate: new Date("1955-02-24"),
+      deathDate: new Date("2011-10-05"),
+      weeksLived: 2938,
+      progressPercent: 73.5,
+      isComplete: true,
+      ageYears: 56,
+    },
+  },
+  {
+    title: "Frida Kahlo",
+    description: "Mexican artist known for self-portraits and surrealist art",
+    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/220px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg",
+    articleUrl: "https://en.wikipedia.org/wiki/Frida_Kahlo",
+    achievements: [
+      "Created iconic surrealist and self-portrait paintings",
+      "Known for exploring pain, identity, and politics in art",
+      "Became a symbol of Mexican culture and feminism",
+    ],
+    timeline: [
+      { year: 1907, text: "Born in Coyoacán, Mexico City" },
+      { year: 1925, text: "Survived a severe bus accident" },
+      { year: 1929, text: "Married muralist Diego Rivera" },
+      { year: 1938, text: "First solo exhibition in New York" },
+      { year: 1954, text: "Last exhibition of her work during lifetime" },
+    ],
+    progress: {
+      birthDate: new Date("1907-07-06"),
+      deathDate: new Date("1954-07-13"),
+      weeksLived: 2444,
+      progressPercent: 61.1,
+      isComplete: true,
+      ageYears: 47,
+    },
+  },
+];
+
 function getCategoryMeta(key) {
   return CATEGORIES.find((c) => c.key === key) || CATEGORIES[0];
 }
@@ -372,7 +506,6 @@ function buildDetailedTimeline(profile) {
 }
 
 export default function WikipediaLifeLens() {
-  const [wikiUrl, setWikiUrl] = useState("");
   const [wikiProfile, setWikiProfile] = useState(null);
   const [wikiLoading, setWikiLoading] = useState(false);
   const [wikiError, setWikiError] = useState("");
@@ -385,22 +518,22 @@ export default function WikipediaLifeLens() {
     setMounted(true);
   }, []);
 
-  const handleAnalyzeWikipedia = async (e) => {
-    e.preventDefault();
+  const handleSelectFigure = async (figure) => {
     setWikiError("");
     setWikiProfile(null);
     setWikiLoading(true);
     setExpandedEvent(null);
 
     try {
-      const data = await fetchWikiLifeData(wikiUrl.trim());
-      setWikiProfile(data);
+      // Simulate loading delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setWikiProfile(figure);
       // Load moments for this profile
-      if (data?.title) {
-        setWikiMoments(getWikiMoments(data.title));
+      if (figure?.title) {
+        setWikiMoments(getWikiMoments(figure.title));
       }
     } catch (err) {
-      setWikiError(err?.message || "Could not analyze this Wikipedia profile.");
+      setWikiError("Could not load this profile.");
     } finally {
       setWikiLoading(false);
     }
@@ -439,43 +572,58 @@ export default function WikipediaLifeLens() {
           transition={{ duration: 0.6 }}>
           <h2>Measure a Life</h2>
           <p>
-            Paste a Wikipedia link to visualize someone&apos;s journey—a
-            detailed path from birth to now, showing every milestone and life
-            stage.
+            Explore inspiring life journeys—visualize the path from birth to now for remarkable figures who shaped the world.
           </p>
         </motion.div>
 
-        <motion.form
-          className="wiki-form"
-          onSubmit={handleAnalyzeWikipedia}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}>
-          <input
-            className="wiki-input"
-            type="url"
-            placeholder="https://en.wikipedia.org/wiki/Steve_Jobs"
-            value={wikiUrl}
-            onChange={(e) => setWikiUrl(e.target.value)}
-            required
-          />
-          <button className="wiki-submit" type="submit" disabled={wikiLoading}>
-            {wikiLoading ? "Reading..." : "Explore"}
-          </button>
-        </motion.form>
+        {/* Figure Selection Grid */}
+        {!wikiProfile && (
+          <motion.div
+            className="wiki-figures-grid"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}>
+            {INSPIRING_FIGURES.map((figure, idx) => (
+              <motion.button
+                key={figure.title}
+                className="wiki-figure-card"
+                onClick={() => handleSelectFigure(figure)}
+                disabled={wikiLoading}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                whileHover={{ y: -4 }}
+                whileTap={{ y: 0 }}>
+                <div className="wiki-figure-image-wrap">
+                  <img
+                    src={figure.thumbnail}
+                    alt={figure.title}
+                    className="wiki-figure-image"
+                  />
+                  <div className="wiki-figure-overlay">
+                    <span className="wiki-figure-cta">View Timeline →</span>
+                  </div>
+                </div>
+                <h3 className="wiki-figure-name">{figure.title}</h3>
+                <p className="wiki-figure-desc">{figure.description}</p>
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+
+        {wikiLoading && (
+          <motion.div
+            className="wiki-loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}>
+            <div className="wiki-loader-spin"></div>
+            <p>Loading timeline...</p>
+          </motion.div>
+        )}
 
         <AnimatePresence mode="wait">
-          {wikiError && (
-            <motion.p
-              className="wiki-error"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}>
-              {wikiError}
-            </motion.p>
-          )}
-
           {wikiProfile && wikiProfile.progress && (
             <motion.div
               className="wiki-result timeline-result"
@@ -483,6 +631,19 @@ export default function WikipediaLifeLens() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}>
+              {/* Back Button */}
+              <motion.button
+                className="wiki-back-btn"
+                onClick={() => {
+                  setWikiProfile(null);
+                  setWikiMoments([]);
+                }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 }}>
+                ← Back to figures
+              </motion.button>
+
               {/* Profile Header */}
               <motion.div
                 className="timeline-profile-header"

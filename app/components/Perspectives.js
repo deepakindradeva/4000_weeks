@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import { useUser } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
@@ -84,6 +84,43 @@ const DUMMY_PERSPECTIVE_DATA = {
   birthdaysLeft: 50,
 };
 
+function calculatePerspectivesFromFigure(figure) {
+  if (!figure?.progress) return null;
+
+  const progress = figure.progress;
+  const weeksLived = progress.weeksLived || 0;
+  
+  // For deceased: all metrics are 0
+  if (progress.isComplete) {
+    return {
+      summersLeft: 0,
+      sunrisesLeft: 0,
+      booksLeft: 0,
+      conversationsWithParents: 0,
+      fullMoonsLeft: 0,
+      mealsLeft: 0,
+      weekendsLeft: 0,
+      birthdaysLeft: 0,
+    };
+  }
+
+  // For living: calculate remaining based on assumed 85-year lifespan
+  const assumedLifespan = 85;
+  const yearsRemaining = Math.max(0, assumedLifespan - (progress.ageYears || 0));
+  const weeksRemaining = Math.max(0, yearsRemaining * 52);
+
+  return {
+    summersLeft: Math.max(0, yearsRemaining),
+    sunrisesLeft: Math.max(0, Math.round(weeksRemaining * 7)),
+    booksLeft: Math.max(0, Math.round(weeksRemaining / 2)),
+    conversationsWithParents: Math.max(0, Math.round(yearsRemaining * 10)),
+    fullMoonsLeft: Math.max(0, Math.round(weeksRemaining / 4)),
+    mealsLeft: Math.max(0, Math.round(weeksRemaining * 21)),
+    weekendsLeft: Math.max(0, Math.round(weeksRemaining)),
+    birthdaysLeft: Math.max(0, Math.round(yearsRemaining)),
+  };
+}
+
 function PerspectiveCard({ perspective, value, index, isInView }) {
   return (
     <motion.div
@@ -112,15 +149,25 @@ function PerspectiveCard({ perspective, value, index, isInView }) {
   );
 }
 
-export default function Perspectives() {
+export default function Perspectives({ selectedFigure }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const { lifeData, hasProfile } = useUser();
   const { isLoggedIn } = useAuth();
 
-  // Use real data for logged-in users with a profile, dummy data for everyone else
-  const displayData = (isLoggedIn && hasProfile && lifeData) ? lifeData : DUMMY_PERSPECTIVE_DATA;
-  const isUsingDummy = !isLoggedIn || !hasProfile || !lifeData;
+  // Calculate data based on selectedFigure or use user's data
+  const displayData = useMemo(() => {
+    if (selectedFigure) {
+      return calculatePerspectivesFromFigure(selectedFigure);
+    }
+    if (isLoggedIn && hasProfile && lifeData) {
+      return lifeData;
+    }
+    return DUMMY_PERSPECTIVE_DATA;
+  }, [selectedFigure, isLoggedIn, hasProfile, lifeData]);
+
+  const isUsingDummy = !selectedFigure && (!isLoggedIn || !hasProfile || !lifeData);
+  const isShowingFigure = !!selectedFigure;
 
   return (
     <section className="section persp-section" id="perspectives" ref={ref}>
@@ -141,7 +188,7 @@ export default function Perspectives() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
         >
-          Numbers don&apos;t move us. Meaning does.
+          {isShowingFigure ? `${selectedFigure.title}'s Time` : "Numbers don't move us. Meaning does."}
         </motion.h2>
 
         <motion.p
@@ -150,7 +197,9 @@ export default function Perspectives() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
         >
-          {isUsingDummy
+          {isShowingFigure
+            ? `Here's how ${selectedFigure.title}'s life breaks down into moments that matter. ${selectedFigure.progress?.isComplete ? "A completed life." : "Their remaining time, if they live to 85."}`
+            : isUsingDummy
             ? "Based on the average 30-year-old. Sign in and enter your birth year to see your own numbers."
             : "Here's your remaining time, translated into moments that matter."}
         </motion.p>
