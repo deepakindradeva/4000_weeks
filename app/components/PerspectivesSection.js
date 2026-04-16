@@ -21,7 +21,7 @@ export default function PerspectivesSection() {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
 
-  const handleSearch = async (e) => {
+  const handleVisualize = async (e) => {
     e.preventDefault();
     const url = urlInput.trim();
     if (!url) return;
@@ -96,34 +96,17 @@ export default function PerspectivesSection() {
               transition={{ duration: 0.6 }}>
               <h2 className="figures-selector-title">Look Up Any Life</h2>
               <p className="figures-selector-intro">Paste any Wikipedia person page URL to visualize their life in weeks.</p>
+              <div className="wiki-search-form">
+                <input
+                  className="wiki-search-input"
+                  type="url"
+                  placeholder="e.g. https://en.wikipedia.org/wiki/Alan_Turing"
+                />
+                <button className="wiki-search-btn" type="button">
+                  Visualize →
+                </button>
+              </div>
             </motion.div>
-
-            <motion.form
-              className="wiki-search-form"
-              onSubmit={handleSearch}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: 0.1 }}>
-              <input
-                className="wiki-search-input"
-                type="url"
-                placeholder="e.g. https://en.wikipedia.org/wiki/Alan_Turing"
-                value={urlInput}
-                onChange={(e) => setUrlInput(e.target.value)}
-                disabled={searching}
-              />
-              <button
-                className="wiki-search-btn"
-                type="submit"
-                disabled={searching || !urlInput.trim()}>
-                {searching ? "Loading…" : "Visualize →"}
-              </button>
-            </motion.form>
-
-            {searchError && (
-              <p className="wiki-error">{searchError}</p>
-            )}
 
             <motion.div
               className="figures-selector-grid"
