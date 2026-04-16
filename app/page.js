@@ -11,6 +11,7 @@ import QuoteRotator from "./components/QuoteRotator";
 import LifeTracker from "./components/LifeTracker";
 import Footer from "./components/Footer";
 import ThemeToggle from "./components/ThemeToggle";
+import HeartbeatBorder from "./components/HeartbeatBorder";
 
 export default function Home() {
   return (
@@ -50,6 +51,7 @@ export default function Home() {
 
       <Footer />
       <ThemeToggle />
+      <HeartbeatBorder />
     </main>
   );
 }

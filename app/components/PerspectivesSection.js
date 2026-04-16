@@ -17,6 +17,29 @@ export default function PerspectivesSection() {
   const [figures, setFigures] = useState([]);
   const [selectedFigure, setSelectedFigure] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [urlInput, setUrlInput] = useState("");
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState("");
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const url = urlInput.trim();
+    if (!url) return;
+    setSearchError("");
+    setSearching(true);
+    try {
+      const data = await fetchWikiLifeData(url);
+      if (!data?.progress) {
+        setSearchError("No birth date found. Try another Wikipedia page.");
+      } else {
+        setSelectedFigure(data);
+      }
+    } catch (err) {
+      setSearchError(err.message || "Could not load this Wikipedia page.");
+    } finally {
+      setSearching(false);
+    }
+  };
 
   useEffect(() => {
     const fetchFigures = async () => {
@@ -65,14 +88,42 @@ export default function PerspectivesSection() {
       {!loading && figures.length > 0 && (
         <section className="section figures-selector-section">
           <div className="section-inner">
-            <motion.p
-              className="figures-selector-intro"
+            <motion.div
+              className="figures-selector-header"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6 }}>
-              Click on a figure to see their life in numbers:
-            </motion.p>
+              <h2 className="figures-selector-title">Look Up Any Life</h2>
+              <p className="figures-selector-intro">Paste any Wikipedia person page URL to visualize their life in weeks.</p>
+            </motion.div>
+
+            <motion.form
+              className="wiki-search-form"
+              onSubmit={handleSearch}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}>
+              <input
+                className="wiki-search-input"
+                type="url"
+                placeholder="e.g. https://en.wikipedia.org/wiki/Alan_Turing"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                disabled={searching}
+              />
+              <button
+                className="wiki-search-btn"
+                type="submit"
+                disabled={searching || !urlInput.trim()}>
+                {searching ? "Loading…" : "Visualize →"}
+              </button>
+            </motion.form>
+
+            {searchError && (
+              <p className="wiki-error">{searchError}</p>
+            )}
 
             <motion.div
               className="figures-selector-grid"

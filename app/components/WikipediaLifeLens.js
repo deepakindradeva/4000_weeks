@@ -521,25 +521,45 @@ export default function WikipediaLifeLens() {
   const [showMomentModal, setShowMomentModal] = useState(false);
   const [wikiMoments, setWikiMoments] = useState([]);
   const [mounted, setMounted] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+  const inputRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleSearch = async (e) => {
+    e?.preventDefault();
+    const url = urlInput.trim();
+    if (!url) return;
+    setWikiError("");
+    setWikiProfile(null);
+    setWikiLoading(true);
+    setExpandedEvent(null);
+    try {
+      const data = await fetchWikiLifeData(url);
+      if (!data?.progress) {
+        setWikiError("No birth date found for this person. Try another Wikipedia page.");
+      } else {
+        setWikiProfile(data);
+        if (data.title) setWikiMoments(getWikiMoments(data.title));
+      }
+    } catch (err) {
+      setWikiError(err.message || "Could not load this Wikipedia page.");
+    } finally {
+      setWikiLoading(false);
+    }
+  };
 
   const handleSelectFigure = async (figure) => {
     setWikiError("");
     setWikiProfile(null);
     setWikiLoading(true);
     setExpandedEvent(null);
-
     try {
-      // Simulate loading delay
       await new Promise((resolve) => setTimeout(resolve, 300));
       setWikiProfile(figure);
-      // Load moments for this profile
-      if (figure?.title) {
-        setWikiMoments(getWikiMoments(figure.title));
-      }
+      if (figure?.title) setWikiMoments(getWikiMoments(figure.title));
     } catch (err) {
       setWikiError("Could not load this profile.");
     } finally {
@@ -569,6 +589,8 @@ export default function WikipediaLifeLens() {
 
   if (!mounted) return null;
 
+  const isDeceased = wikiProfile?.progress?.isComplete;
+
   return (
     <section className="user-home-wiki timeline-section">
       <div className="user-home-inner">
@@ -578,48 +600,44 @@ export default function WikipediaLifeLens() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}>
-          <h2>Measure a Life</h2>
+          <h2>Look Up Any Life</h2>
           <p>
-            Explore inspiring life journeys—visualize the path from birth to now
-            for remarkable figures who shaped the world.
+            Paste any Wikipedia person page URL to visualize their life in weeks.
           </p>
         </motion.div>
 
-        {/* Figure Selection Grid */}
-        {!wikiProfile && (
-          <motion.div
-            className="wiki-figures-grid"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}>
-            {INSPIRING_FIGURES.map((figure, idx) => (
-              <motion.button
-                key={figure.title}
-                className="wiki-figure-card"
-                onClick={() => handleSelectFigure(figure)}
-                disabled={wikiLoading}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                whileHover={{ y: -4 }}
-                whileTap={{ y: 0 }}>
-                <div className="wiki-figure-image-wrap">
-                  <img
-                    src={figure.thumbnail}
-                    alt={figure.title}
-                    className="wiki-figure-image"
-                  />
-                  <div className="wiki-figure-overlay">
-                    <span className="wiki-figure-cta">View Timeline →</span>
-                  </div>
-                </div>
-                <h3 className="wiki-figure-name">{figure.title}</h3>
-                <p className="wiki-figure-desc">{figure.description}</p>
-              </motion.button>
-            ))}
-          </motion.div>
+        {/* URL Search */}
+        <motion.form
+          className="wiki-search-form"
+          onSubmit={handleSearch}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}>
+          <input
+            ref={inputRef}
+            className="wiki-search-input"
+            type="url"
+            placeholder="e.g. https://en.wikipedia.org/wiki/Alan_Turing"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            disabled={wikiLoading}
+          />
+          <button
+            className="wiki-search-btn"
+            type="submit"
+            disabled={wikiLoading || !urlInput.trim()}>
+            {wikiLoading ? "Loading…" : "Visualize →"}
+          </button>
+        </motion.form>
+
+        {wikiError && (
+          <motion.p
+            className="wiki-error"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}>
+            {wikiError}
+          </motion.p>
         )}
 
         {wikiLoading && (
@@ -635,22 +653,40 @@ export default function WikipediaLifeLens() {
         <AnimatePresence mode="wait">
           {wikiProfile && wikiProfile.progress && (
             <motion.div
-              className="wiki-result timeline-result"
+              className={`wiki-result timeline-result${isDeceased ? " timeline-result--deceased" : ""}`}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}>
+
+              {/* Deceased memorial banner */}
+              {isDeceased && (
+                <motion.div
+                  className="deceased-banner"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}>
+                  <span className="deceased-badge">✦ Life Complete</span>
+                  <span className="deceased-dates">
+                    {new Date(wikiProfile.progress.birthDate).getFullYear()}
+                    {" — "}
+                    {new Date(wikiProfile.progress.deathDate).getFullYear()}
+                  </span>
+                </motion.div>
+              )}
+
               {/* Back Button */}
               <motion.button
                 className="wiki-back-btn"
                 onClick={() => {
                   setWikiProfile(null);
                   setWikiMoments([]);
+                  setUrlInput("");
                 }}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 }}>
-                ← Back to figures
+                ← Search another
               </motion.button>
 
               {/* Profile Header */}
@@ -664,7 +700,7 @@ export default function WikipediaLifeLens() {
                     <motion.img
                       src={wikiProfile.thumbnail}
                       alt={wikiProfile.title}
-                      className="timeline-avatar"
+                      className={`timeline-avatar${isDeceased ? " timeline-avatar--deceased" : ""}`}
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.2 }}
@@ -697,6 +733,14 @@ export default function WikipediaLifeLens() {
                     </div>
                     <div className="timeline-stat-label">Born</div>
                   </div>
+                  {isDeceased && (
+                    <div className="timeline-stat-box">
+                      <div className="timeline-stat-num">
+                        {new Date(wikiProfile.progress.deathDate).getFullYear()}
+                      </div>
+                      <div className="timeline-stat-label">Died</div>
+                    </div>
+                  )}
                   <div className="timeline-stat-box">
                     <div className="timeline-stat-num">
                       {wikiProfile.progress.ageYears}
@@ -711,7 +755,7 @@ export default function WikipediaLifeLens() {
                   </div>
                   <div className="timeline-stat-box">
                     <div className="timeline-stat-num">
-                      {wikiProfile.progress.progressPercent.toFixed(0)}%
+                      {Math.min(wikiProfile.progress.progressPercent, 100).toFixed(0)}%
                     </div>
                     <div className="timeline-stat-label">Of 4,000 weeks</div>
                   </div>
@@ -724,12 +768,12 @@ export default function WikipediaLifeLens() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.35 }}>
-                <div className="timeline-progress-track">
+                <div className={`timeline-progress-track${isDeceased ? " timeline-progress-track--deceased" : ""}`}>
                   <motion.div
-                    className="timeline-progress-fill"
+                    className={`timeline-progress-fill${isDeceased ? " timeline-progress-fill--deceased" : ""}`}
                     initial={{ width: 0 }}
                     animate={{
-                      width: `${wikiProfile.progress.progressPercent}%`,
+                      width: `${Math.min(wikiProfile.progress.progressPercent, 100)}%`,
                     }}
                     transition={{
                       duration: 1.4,
@@ -737,7 +781,17 @@ export default function WikipediaLifeLens() {
                       delay: 0.4,
                     }}
                   />
+                  {isDeceased && wikiProfile.progress.progressPercent > 100 && (
+                    <div className="timeline-progress-overflow-label">
+                      +{(wikiProfile.progress.progressPercent - 100).toFixed(0)}% beyond 4,000
+                    </div>
+                  )}
                 </div>
+                {isDeceased && (
+                  <p className="deceased-weeks-note">
+                    Lived {wikiProfile.progress.weeksLived.toLocaleString()} weeks · A complete life
+                  </p>
+                )}
               </motion.div>
 
               {/* Detailed Timeline: Birth to Now */}
@@ -1009,8 +1063,7 @@ export default function WikipediaLifeLens() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25 }}>
-              Birth or death dates aren&apos;t available—can&apos;t visualize
-              the timeline for this profile yet.
+              Birth date not found — can&apos;t visualize this timeline yet.
             </motion.p>
           )}
         </AnimatePresence>
