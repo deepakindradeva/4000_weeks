@@ -23,6 +23,130 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+[data-theme="light"] {
+  --color-bg: #faf8f5;
+  --color-bg-elevated: #f2efe9;
+  --color-surface: #eae6de;
+  --color-surface-hover: #dedad0;
+  --color-border: rgba(0, 0, 0, 0.09);
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #4a4a4f;
+  --color-text-tertiary: #8a8a90;
+}
+
+/* Nav */
+[data-theme="light"] .nav {
+  background: rgba(250, 248, 245, 0.85);
+}
+
+/* Hero counter — invert gradient to dark */
+[data-theme="light"] .hero-counter {
+  background: linear-gradient(180deg, #1a1a1a 0%, rgba(26, 26, 26, 0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .hero-bg-gradient {
+  opacity: 0.4;
+}
+
+/* Week grid cell */
+[data-theme="light"] .week-cell-lived,
+[data-theme="light"] .wiki-week-cell.lived {
+  background: #1a1a1a;
+  box-shadow: none;
+}
+
+/* Nav Google button glass effect */
+[data-theme="light"] .nav-google-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .nav-google-btn:hover {
+  background: rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* User dropdown */
+[data-theme="light"] .nav-user-dropdown {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* Parallax sections — darken highlight gradients for light bg */
+[data-theme="light"] .parallax-section--mastery {
+  --parallax-glow: rgba(41, 151, 255, 0.1);
+  --parallax-highlight-start: #1a6fcc;
+  --parallax-highlight-end: #0a4fa8;
+  --parallax-attribution: #3a7fd4;
+}
+
+[data-theme="light"] .parallax-section--meaning {
+  --parallax-glow: rgba(180, 130, 0, 0.1);
+  --parallax-highlight-start: #9a6e00;
+  --parallax-highlight-end: #c48b00;
+  --parallax-attribution: #a07800;
+}
+
+/* Calculator card */
+[data-theme="light"] .calculator-card {
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .calc-input {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--color-text-primary);
+}
+
+[data-theme="light"] .calc-input:focus {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .calc-gender-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile nav signin */
+[data-theme="light"] .nav-mobile-signin {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .nav-mobile-signin:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.09);
+}
+
+/* Week dot current */
+[data-theme="light"] .week-dot.current {
+  background: #1a1a1a;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Progress bar */
+[data-theme="light"] .progress-bar {
+  background: var(--color-accent);
+}
+
+/* Figure selector card */
+[data-theme="light"] .figure-selector-card {
+  background: var(--color-bg-elevated);
+  border-color: rgba(0, 0, 0, 0.09);
+}
+
+[data-theme="light"] .figure-selector-card:hover {
+  background: var(--color-surface);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+/* Theme toggle */
+[data-theme="light"] .theme-toggle {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
 *,
 *::before,
 *::after {
@@ -734,19 +858,35 @@ body {
   height: 6px;
   border-radius: 1px;
   background: var(--color-text-tertiary);
-  opacity: 0.15;
+  opacity: 0.22;
   transition: all 0.4s var(--ease-out-expo);
 }
 
 .week-dot.lived {
-  background: var(--color-accent);
-  opacity: 0.7;
+  background: #e8c547;
+  opacity: 0.85;
 }
 
 .week-dot.current {
-  background: #ffffff;
+  background: #ff6b35;
   opacity: 1;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 8px rgba(255, 107, 53, 0.7);
+}
+
+[data-theme="light"] .week-dot {
+  background: #b0a898;
+  opacity: 0.35;
+}
+
+[data-theme="light"] .week-dot.lived {
+  background: #c47d00;
+  opacity: 0.9;
+}
+
+[data-theme="light"] .week-dot.current {
+  background: #e05a1a;
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(224, 90, 26, 0.5);
 }
 
 .week-grid-stats {
@@ -1448,6 +1588,68 @@ body {
 /* ============================================
    RESPONSIVE
    ============================================ */
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-mobile-menu {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.nav-mobile-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-mobile-links li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav-mobile-links a {
+  display: block;
+  padding: 12px 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-mobile-links a:hover {
+  color: var(--color-text-primary);
+}
+
+.nav-mobile-signin {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.nav-mobile-signin:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 768px) {
   .nav {
     padding: 0 20px;
@@ -1455,6 +1657,10 @@ body {
 
   .nav-links {
     display: none;
+  }
+
+  .nav-mobile-toggle {
+    display: flex;
   }
 
   .nav-right {
@@ -5146,4 +5352,31 @@ textarea:focus-visible {
   .famous-figures-cta {
     padding: 24px;
   }
+}
+
+/* ============================================
+   THEME TOGGLE
+   ============================================ */
+.theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-text-tertiary);
 }

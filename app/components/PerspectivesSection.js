@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { fetchWikiLifeData } from "../lib/wikipediaLife";
 import Perspectives from "./Perspectives";
 
@@ -22,19 +22,12 @@ export default function PerspectivesSection() {
     const fetchFigures = async () => {
       try {
         setLoading(true);
-        const results = [];
-
-        for (const url of FAMOUS_FIGURES_URLS) {
-          try {
-            const data = await fetchWikiLifeData(url);
-            if (data && data.progress) {
-              results.push(data);
-            }
-          } catch (err) {
-            console.error(`Failed to fetch ${url}:`, err);
-          }
-        }
-
+        const settled = await Promise.allSettled(
+          FAMOUS_FIGURES_URLS.map((url) => fetchWikiLifeData(url))
+        );
+        const results = settled
+          .filter((r) => r.status === "fulfilled" && r.value?.progress)
+          .map((r) => r.value);
         setFigures(results);
       } catch (err) {
         console.error("Failed to fetch figures:", err);
@@ -48,6 +41,26 @@ export default function PerspectivesSection() {
 
   return (
     <>
+      <div id="figures" style={{ height: 0 }} />
+
+      {/* Loading skeleton */}
+      {loading && (
+        <section className="section figures-selector-section">
+          <div className="section-inner">
+            <p className="figures-selector-intro">Loading famous figures…</p>
+            <div className="figures-selector-grid">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="figure-selector-card" style={{ opacity: 0.4, pointerEvents: "none" }}>
+                  <div className="figure-selector-image-wrap" style={{ background: "var(--color-border)" }} />
+                  <div style={{ height: 14, width: "60%", background: "var(--color-border)", borderRadius: 6 }} />
+                  <div style={{ height: 12, width: "80%", background: "var(--color-border)", borderRadius: 6 }} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Famous Figures Selector */}
       {!loading && figures.length > 0 && (
         <section className="section figures-selector-section">

@@ -10,6 +10,7 @@ import PerspectivesSection from "./components/PerspectivesSection";
 import QuoteRotator from "./components/QuoteRotator";
 import LifeTracker from "./components/LifeTracker";
 import Footer from "./components/Footer";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function Home() {
   return (
@@ -48,6 +49,7 @@ export default function Home() {
       <QuoteRotator />
 
       <Footer />
+      <ThemeToggle />
     </main>
   );
 }

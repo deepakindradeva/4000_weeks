@@ -8,6 +8,7 @@ export default function Navigation() {
   const { scrollYProgress } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const menuRef = useRef(null);
   const { user, isLoggedIn, isLoggingIn, signInWithGoogle, signOut } = useAuth();
 
@@ -57,10 +58,21 @@ export default function Navigation() {
               <li><a href="#premise">The Premise</a></li>
               <li><a href="#ideas">Key Ideas</a></li>
               <li><a href="#tools">10 Tools</a></li>
-              <li><a href="#calculator">Your Weeks</a></li>
-              <li><a href="#perspectives">Perspectives</a></li>
-              <li><a href="#tracker">Your Story</a></li>
+              <li><a href="#figures">Famous People</a></li>
             </ul>
+
+            {/* Mobile hamburger */}
+            <button
+              className="nav-mobile-toggle"
+              onClick={() => setShowMobileMenu((prev) => !prev)}
+              aria-label="Toggle mobile menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
 
             {/* Auth button area */}
             {isLoggedIn ? (
@@ -137,6 +149,35 @@ export default function Navigation() {
           </div>
         </div>
       </motion.nav>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {showMobileMenu && (
+          <motion.div
+            className="nav-mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ul className="nav-mobile-links">
+              <li><a href="#premise" onClick={() => setShowMobileMenu(false)}>The Premise</a></li>
+              <li><a href="#ideas" onClick={() => setShowMobileMenu(false)}>Key Ideas</a></li>
+              <li><a href="#tools" onClick={() => setShowMobileMenu(false)}>10 Tools</a></li>
+              <li><a href="#figures" onClick={() => setShowMobileMenu(false)}>Famous People</a></li>
+            </ul>
+            {!isLoggedIn && (
+              <button
+                className="nav-mobile-signin"
+                onClick={() => { signInWithGoogle(); setShowMobileMenu(false); }}
+                disabled={isLoggingIn}
+              >
+                Sign in with Google
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Progress bar */}
       <motion.div
