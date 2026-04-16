@@ -186,7 +186,9 @@ export default function WikipediaLifeLens() {
           transition={{ duration: 0.6 }}>
           <h2>Measure a Life</h2>
           <p>
-            Paste a Wikipedia link to visualize someone&apos;s journey—a detailed path from birth to now, showing every milestone and life stage.
+            Paste a Wikipedia link to visualize someone&apos;s journey—a
+            detailed path from birth to now, showing every milestone and life
+            stage.
           </p>
         </motion.div>
 
@@ -228,7 +230,6 @@ export default function WikipediaLifeLens() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}>
-              
               {/* Profile Header */}
               <motion.div
                 className="timeline-profile-header"
@@ -248,7 +249,9 @@ export default function WikipediaLifeLens() {
                   )}
                   <div className="timeline-header-content">
                     <h3 className="timeline-title">{wikiProfile.title}</h3>
-                    <p className="timeline-description">{wikiProfile.description}</p>
+                    <p className="timeline-description">
+                      {wikiProfile.description}
+                    </p>
                     <a
                       className="timeline-wiki-link"
                       href={wikiProfile.articleUrl}
@@ -302,7 +305,9 @@ export default function WikipediaLifeLens() {
                   <motion.div
                     className="timeline-progress-fill"
                     initial={{ width: 0 }}
-                    animate={{ width: `${wikiProfile.progress.progressPercent}%` }}
+                    animate={{
+                      width: `${wikiProfile.progress.progressPercent}%`,
+                    }}
                     transition={{
                       duration: 1.4,
                       ease: [0.16, 1, 0.3, 1],
@@ -319,22 +324,44 @@ export default function WikipediaLifeLens() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.45 }}>
-                  <h4 className="timeline-section-title">Journey from birth to today</h4>
-                  
+                  <h4 className="timeline-section-title">
+                    Journey from birth to today
+                  </h4>
+
                   {/* Vertical Timeline with animated path */}
                   <div className="timeline-path-container">
                     {/* Animated SVG path */}
-                    <svg className="timeline-svg-path" viewBox="0 0 60 100" preserveAspectRatio="none">
+                    <svg
+                      className="timeline-svg-path"
+                      viewBox="0 0 60 100"
+                      preserveAspectRatio="none">
                       <defs>
-                        <linearGradient id="pathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stopColor="rgba(191, 90, 242, 0.3)" />
-                          <stop offset="50%" stopColor="rgba(41, 151, 255, 0.3)" />
-                          <stop offset="100%" stopColor="rgba(48, 213, 200, 0.3)" />
+                        <linearGradient
+                          id="pathGradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="0%"
+                          y2="100%">
+                          <stop
+                            offset="0%"
+                            stopColor="rgba(191, 90, 242, 0.3)"
+                          />
+                          <stop
+                            offset="50%"
+                            stopColor="rgba(41, 151, 255, 0.3)"
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor="rgba(48, 213, 200, 0.3)"
+                          />
                         </linearGradient>
                       </defs>
                       <motion.path
                         d={`M 30 0 ${detailedTimeline
-                          .map((_, i) => `L 30 ${(i / (detailedTimeline.length - 1 || 1)) * 100}`)
+                          .map(
+                            (_, i) =>
+                              `L 30 ${(i / (detailedTimeline.length - 1 || 1)) * 100}`,
+                          )
                           .join(" ")}`}
                         stroke="url(#pathGradient)"
                         strokeWidth="2"
@@ -387,7 +414,12 @@ export default function WikipediaLifeLens() {
                                 {event.text}
                               </div>
                               {event.isLifeStage && (
-                                <span className="timeline-stage-badge" style={{background: stage.color + "20", borderColor: stage.color}}>
+                                <span
+                                  className="timeline-stage-badge"
+                                  style={{
+                                    background: stage.color + "20",
+                                    borderColor: stage.color,
+                                  }}>
                                   {stage.name}
                                 </span>
                               )}
@@ -413,13 +445,13 @@ export default function WikipediaLifeLens() {
                       const ageMin = stage.ageRange[0];
                       const ageMax = Math.min(
                         stage.ageRange[1],
-                        wikiProfile.progress.ageYears
+                        wikiProfile.progress.ageYears,
                       );
                       const stageLived = Math.max(0, ageMax - ageMin + 1);
-                      const stageDuration = stage.ageRange[1] - stage.ageRange[0] + 1;
+                      const stageDuration =
+                        stage.ageRange[1] - stage.ageRange[0] + 1;
                       const stagePercent = (stageLived / stageDuration) * 100;
-                      const isActive =
-                        wikiProfile.progress.ageYears >= ageMin;
+                      const isActive = wikiProfile.progress.ageYears >= ageMin;
                       const isCurrent =
                         wikiProfile.progress.ageYears >= ageMin &&
                         wikiProfile.progress.ageYears < ageMax;
@@ -441,7 +473,9 @@ export default function WikipediaLifeLens() {
                             <motion.div
                               className="timeline-stage-fill"
                               initial={{ width: 0 }}
-                              animate={{ width: `${isActive ? stagePercent : 0}%` }}
+                              animate={{
+                                width: `${isActive ? stagePercent : 0}%`,
+                              }}
                               transition={{
                                 duration: 1,
                                 delay: 0.7,
@@ -465,7 +499,9 @@ export default function WikipediaLifeLens() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.75 }}>
-                <p>Now visualize your own path—track moments from birth to today.</p>
+                <p>
+                  Now visualize your own path—track moments from birth to today.
+                </p>
                 <button
                   className="timeline-cta-btn"
                   onClick={() => {
@@ -485,8 +521,8 @@ export default function WikipediaLifeLens() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25 }}>
-              Birth or death dates aren&apos;t available—can&apos;t visualize the timeline
-              for this profile yet.
+              Birth or death dates aren&apos;t available—can&apos;t visualize
+              the timeline for this profile yet.
             </motion.p>
           )}
         </AnimatePresence>
