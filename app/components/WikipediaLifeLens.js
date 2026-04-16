@@ -18,6 +18,231 @@ const LIFE_STAGES = [
   { name: "Later Life", color: "#ff6b35", ageRange: [65, 120] },
 ];
 
+// Tracking categories
+const CATEGORIES = [
+  { key: "milestone", label: "Milestone", icon: "🏆", color: "#e8c547" },
+  { key: "career", label: "Career", icon: "💼", color: "#2997ff" },
+  { key: "personal", label: "Personal", icon: "💜", color: "#bf5af2" },
+  { key: "health", label: "Health", icon: "🏃", color: "#30d5c8" },
+  { key: "education", label: "Education", icon: "📚", color: "#ff6b35" },
+  { key: "travel", label: "Travel", icon: "✈️", color: "#ff375f" },
+  { key: "creative", label: "Creative", icon: "🎨", color: "#64d2ff" },
+];
+
+const MOODS = [
+  { value: 1, emoji: "😫", label: "Tough" },
+  { value: 2, emoji: "😕", label: "Meh" },
+  { value: 3, emoji: "😐", label: "Okay" },
+  { value: 4, emoji: "🙂", label: "Good" },
+  { value: 5, emoji: "😊", label: "Great" },
+];
+
+function getCategoryMeta(key) {
+  return CATEGORIES.find((c) => c.key === key) || CATEGORIES[0];
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function getWikiStorageKey(profileTitle) {
+  return `wiki_moments_${profileTitle.replace(/\s+/g, "_").toLowerCase()}`;
+}
+
+function getWikiMoments(profileTitle) {
+  if (typeof window === "undefined") return [];
+  const key = getWikiStorageKey(profileTitle);
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
+}
+
+function saveWikiMoment(profileTitle, moment) {
+  if (typeof window === "undefined") return;
+  const key = getWikiStorageKey(profileTitle);
+  const moments = getWikiMoments(profileTitle);
+  moments.push({ ...moment, id: Date.now() });
+  localStorage.setItem(key, JSON.stringify(moments));
+}
+
+function deleteWikiMoment(profileTitle, id) {
+  if (typeof window === "undefined") return;
+  const key = getWikiStorageKey(profileTitle);
+  const moments = getWikiMoments(profileTitle);
+  const filtered = moments.filter((m) => m.id !== id);
+  localStorage.setItem(key, JSON.stringify(filtered));
+}
+
+/* ═══════════════════════════════════════
+   EVENT MODAL FOR WIKIPEDIA MOMENTS
+   ═══════════════════════════════════════ */
+function WikiMomentModal({ profileTitle, onSave, onClose }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [category, setCategory] = useState("milestone");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+    onSave({
+      title: title.trim(),
+      description: description.trim(),
+      date,
+      category,
+    });
+    setTitle("");
+    setDescription("");
+    setCategory("milestone");
+  };
+
+  return (
+    <motion.div
+      className="lt-modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onClose}>
+      <motion.div
+        className="lt-modal"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}>
+        <div className="lt-modal-header">
+          <h3>Log a moment inspired by {profileTitle}</h3>
+          <button
+            className="lt-modal-close"
+            onClick={onClose}
+            aria-label="Close">
+            ✕
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="lt-form-group">
+            <label className="lt-form-label" htmlFor="wm-title">
+              What struck you?
+            </label>
+            <input
+              id="wm-title"
+              className="lt-form-input"
+              type="text"
+              placeholder="A lesson, realization, or moment inspired by their path…"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              autoFocus
+              required
+            />
+          </div>
+
+          <div className="lt-form-group">
+            <label className="lt-form-label" htmlFor="wm-desc">
+              How does it relate?
+            </label>
+            <textarea
+              id="wm-desc"
+              className="lt-form-input lt-form-textarea"
+              placeholder="Why does this matter to you?"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+            />
+          </div>
+
+          <div className="lt-form-row">
+            <div className="lt-form-group" style={{ flex: 1 }}>
+              <label className="lt-form-label" htmlFor="wm-date">
+                When
+              </label>
+              <input
+                id="wm-date"
+                className="lt-form-input"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="lt-form-group">
+            <label className="lt-form-label">Category</label>
+            <div className="lt-category-picker">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.key}
+                  type="button"
+                  className={`lt-category-chip ${category === cat.key ? "active" : ""}`}
+                  style={{ "--chip-color": cat.color }}
+                  onClick={() => setCategory(cat.key)}>
+                  <span className="lt-chip-icon">{cat.icon}</span>
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button type="submit" className="lt-submit-btn">
+            Save Moment
+          </button>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   WIKI MOMENT CARD
+   ═══════════════════════════════════════ */
+function WikiMomentCard({ moment, onDelete, index, profileTitle }) {
+  const cat = getCategoryMeta(moment.category);
+  return (
+    <motion.div
+      className="lt-timeline-card"
+      style={{ "--cat-color": cat.color }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{
+        duration: 0.45,
+        ease: [0.16, 1, 0.3, 1],
+        delay: index * 0.04,
+      }}
+      layout>
+      <div className="lt-card-top">
+        <span
+          className="lt-card-cat-pill"
+          style={{ color: cat.color, background: cat.color + "1a" }}>
+          {cat.icon} {cat.label}
+        </span>
+        <span className="lt-card-ago">{formatDate(moment.date)}</span>
+      </div>
+      <h4 className="lt-card-title">{moment.title}</h4>
+      {moment.description && (
+        <p className="lt-card-desc">{moment.description}</p>
+      )}
+      <div className="lt-card-footer">
+        <span className="lt-card-date">{formatDate(moment.date)}</span>
+        <div className="lt-card-actions">
+          <button
+            className="lt-card-btn lt-card-btn-danger"
+            onClick={() => onDelete(moment.id)}
+            aria-label="Delete">
+            ✕
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -152,6 +377,13 @@ export default function WikipediaLifeLens() {
   const [wikiLoading, setWikiLoading] = useState(false);
   const [wikiError, setWikiError] = useState("");
   const [expandedEvent, setExpandedEvent] = useState(null);
+  const [showMomentModal, setShowMomentModal] = useState(false);
+  const [wikiMoments, setWikiMoments] = useState([]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleAnalyzeWikipedia = async (e) => {
     e.preventDefault();
@@ -163,6 +395,10 @@ export default function WikipediaLifeLens() {
     try {
       const data = await fetchWikiLifeData(wikiUrl.trim());
       setWikiProfile(data);
+      // Load moments for this profile
+      if (data?.title) {
+        setWikiMoments(getWikiMoments(data.title));
+      }
     } catch (err) {
       setWikiError(err?.message || "Could not analyze this Wikipedia profile.");
     } finally {
@@ -170,10 +406,27 @@ export default function WikipediaLifeLens() {
     }
   };
 
+  const handleSaveMoment = (data) => {
+    if (wikiProfile?.title) {
+      saveWikiMoment(wikiProfile.title, data);
+      setWikiMoments(getWikiMoments(wikiProfile.title));
+      setShowMomentModal(false);
+    }
+  };
+
+  const handleDeleteMoment = (id) => {
+    if (wikiProfile?.title) {
+      deleteWikiMoment(wikiProfile.title, id);
+      setWikiMoments(getWikiMoments(wikiProfile.title));
+    }
+  };
+
   const detailedTimeline = useMemo(
     () => (wikiProfile ? buildDetailedTimeline(wikiProfile) : []),
     [wikiProfile],
   );
+
+  if (!mounted) return null;
 
   return (
     <section className="user-home-wiki timeline-section">
@@ -512,6 +765,71 @@ export default function WikipediaLifeLens() {
                   Start Tracking →
                 </button>
               </motion.div>
+
+              {/* Track Moments Inspired by This Life */}
+              <motion.div
+                className="timeline-moments-section"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.85 }}>
+                <h4 className="timeline-section-title">
+                  Track the moments that define your weeks
+                </h4>
+                <p className="timeline-moments-subtitle">
+                  Log insights and lessons inspired by {wikiProfile.title}
+                  &apos;s path.
+                </p>
+
+                {/* Moments Hero Stats */}
+                <div className="timeline-moments-hero">
+                  <div className="lt-tracker-hero-stat">
+                    <span className="lt-tracker-hero-num">
+                      {wikiMoments.length}
+                    </span>
+                    <span className="lt-tracker-hero-label">
+                      Moments logged
+                    </span>
+                  </div>
+                </div>
+
+                {/* Add Moment Button */}
+                <div className="timeline-moments-actions">
+                  <button
+                    className="timeline-moment-add-btn"
+                    onClick={() => setShowMomentModal(true)}>
+                    <span>+</span> Log a moment
+                  </button>
+                </div>
+
+                {/* Moments Timeline */}
+                {wikiMoments.length > 0 && (
+                  <div className="lt-timeline lt-timeline--milestones">
+                    <AnimatePresence mode="popLayout">
+                      {wikiMoments
+                        .slice()
+                        .reverse()
+                        .map((moment, i) => (
+                          <WikiMomentCard
+                            key={moment.id}
+                            moment={moment}
+                            onDelete={handleDeleteMoment}
+                            index={i}
+                            profileTitle={wikiProfile.title}
+                          />
+                        ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {wikiMoments.length === 0 && (
+                  <div className="lt-empty">
+                    <div className="lt-empty-icon">✦</div>
+                    <p className="lt-empty-text">
+                      Log your first moment inspired by this life to begin.
+                    </p>
+                  </div>
+                )}
+              </motion.div>
             </motion.div>
           )}
 
@@ -527,6 +845,17 @@ export default function WikipediaLifeLens() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Modals */}
+      <AnimatePresence>
+        {showMomentModal && (
+          <WikiMomentModal
+            profileTitle={wikiProfile?.title || ""}
+            onSave={handleSaveMoment}
+            onClose={() => setShowMomentModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -4509,3 +4509,76 @@ textarea:focus-visible {
     padding: 24px;
   }
 }
+
+/* ============================================
+   MOMENTS TRACKING (inspired by life)
+   ============================================ */
+
+.timeline-moments-section {
+  margin-top: 40px;
+  padding: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(191, 90, 242, 0.05),
+    rgba(48, 213, 200, 0.04)
+  );
+  border: 1px solid rgba(48, 213, 200, 0.1);
+  border-radius: 16px;
+}
+
+.timeline-moments-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.timeline-moments-hero {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 20px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(48, 213, 200, 0.1);
+}
+
+.timeline-moments-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.timeline-moment-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-teal),
+    var(--color-accent)
+  );
+  border: none;
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  letter-spacing: 0.02em;
+}
+
+.timeline-moment-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(48, 213, 200, 0.3);
+}
+
+.timeline-moment-add-btn:active {
+  transform: translateY(0);
+}
+
+.timeline-moment-add-btn span {
+  font-size: 16px;
+  font-weight: 700;
+}
