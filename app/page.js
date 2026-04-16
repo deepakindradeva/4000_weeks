@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import Premise from "./components/Premise";
@@ -14,6 +17,8 @@ import ThemeToggle from "./components/ThemeToggle";
 import HeartbeatBorder from "./components/HeartbeatBorder";
 
 export default function Home() {
+  const [selectedFigure, setSelectedFigure] = useState(null);
+
   return (
     <main>
       <Navigation />
@@ -43,9 +48,12 @@ export default function Home() {
 
       <Calculator />
 
-      <PerspectivesSection />
+      <PerspectivesSection
+        selectedFigure={selectedFigure}
+        onSelectFigure={setSelectedFigure}
+      />
 
-      <LifeTracker />
+      <LifeTracker selectedFigure={selectedFigure} />
 
       <QuoteRotator />
 

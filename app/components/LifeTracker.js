@@ -446,13 +446,15 @@ function MoodSparkline({ data }) {
 /* ═══════════════════════════════════════
    DEMO BANNER
    ═══════════════════════════════════════ */
-function DemoBanner({ onSignIn, isLoggingIn }) {
+function DemoBanner({ onSignIn, isLoggingIn, figureName }) {
   return (
     <div className="lt-demo-banner">
       <div className="lt-demo-banner-left">
-        <span className="lt-demo-badge">Preview</span>
+        <span className="lt-demo-badge">{figureName ? "Wikipedia" : "Preview"}</span>
         <span className="lt-demo-text">
-          You&apos;re exploring Alex&apos;s demo timeline.
+          {figureName
+            ? `You're exploring ${figureName}'s timeline.`
+            : "You're exploring Alex's demo timeline."}
         </span>
       </div>
       <button
@@ -696,7 +698,7 @@ function TrackerContent({
 /* ═══════════════════════════════════════
    MAIN TRACKER COMPONENT
    ═══════════════════════════════════════ */
-export default function LifeTracker() {
+export default function LifeTracker({ selectedFigure }) {
   const { lifeData } = useUser();
   const { isLoggedIn, signInWithGoogle, isLoggingIn } = useAuth();
 
@@ -759,17 +761,36 @@ export default function LifeTracker() {
 
   if (!mounted) return null;
 
+  // ─── Map selectedFigure timeline → events format ─────────────────────────
+  const figureEvents = selectedFigure?.timeline
+    ? selectedFigure.timeline
+        .slice()
+        .sort((a, b) => a.year - b.year)
+        .map((item, i) => ({
+          id: `fig_evt_${i}`,
+          title: item.text,
+          description: "",
+          date: `${item.year}-01-01`,
+          category: "milestone",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }))
+    : null;
+
+  const activeEvents = figureEvents || DEMO_EVENTS;
+  const activeReflections = figureEvents ? [] : DEMO_REFLECTIONS;
+
   // ─── Compute preview stats from demo data ────────────────────────────────
   const demoCategories = {};
-  DEMO_EVENTS.forEach((e) => {
+  activeEvents.forEach((e) => {
     demoCategories[e.category] = (demoCategories[e.category] || 0) + 1;
   });
   const demoEventStats = {
-    total: DEMO_EVENTS.length,
+    total: activeEvents.length,
     categories: demoCategories,
-    earliest: DEMO_EVENTS[DEMO_EVENTS.length - 1]?.date,
+    earliest: activeEvents[activeEvents.length - 1]?.date,
   };
-  const demoMoods = DEMO_REFLECTIONS.map((r) => r.mood);
+  const demoMoods = activeReflections.map((r) => r.mood);
   const demoAvgMood = (demoMoods.reduce((a, b) => a + b, 0) / demoMoods.length).toFixed(1);
   const demoRefStats = {
     total: DEMO_REFLECTIONS.length,
@@ -807,7 +828,9 @@ export default function LifeTracker() {
             viewport={VP}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            Track the moments that define your weeks.
+            {selectedFigure
+              ? `Track the moments that defined ${selectedFigure.title}'s weeks.`
+              : "Track the moments that define your weeks."}
           </motion.h2>
 
           <motion.p
@@ -857,16 +880,16 @@ export default function LifeTracker() {
             viewport={VP}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <DemoBanner onSignIn={signInWithGoogle} isLoggingIn={isLoggingIn} />
+            <DemoBanner onSignIn={signInWithGoogle} isLoggingIn={isLoggingIn} figureName={selectedFigure?.title} />
           </motion.div>
 
           <TrackerContent
-            events={DEMO_EVENTS}
-            reflections={DEMO_REFLECTIONS}
+            events={activeEvents}
+            reflections={activeReflections}
             eventStats={demoEventStats}
             refStats={demoRefStats}
             isPreview={true}
-            currentWeek={1775}
+            currentWeek={selectedFigure?.progress?.weeksLived || 1775}
             filterCategory={filterCategory}
             setFilterCategory={setFilterCategory}
             activeTab={activeTab}

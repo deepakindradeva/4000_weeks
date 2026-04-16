@@ -13,9 +13,8 @@ const FAMOUS_FIGURES_URLS = [
   "https://en.wikipedia.org/wiki/Bill_Gates",
 ];
 
-export default function PerspectivesSection() {
+export default function PerspectivesSection({ selectedFigure, onSelectFigure }) {
   const [figures, setFigures] = useState([]);
-  const [selectedFigure, setSelectedFigure] = useState(null);
   const [loading, setLoading] = useState(true);
   const [urlInput, setUrlInput] = useState("");
   const [searching, setSearching] = useState(false);
@@ -32,7 +31,7 @@ export default function PerspectivesSection() {
       if (!data?.progress) {
         setSearchError("No birth date found. Try another Wikipedia page.");
       } else {
-        setSelectedFigure(data);
+        onSelectFigure(data);
       }
     } catch (err) {
       setSearchError(err.message || "Could not load this Wikipedia page.");
@@ -96,16 +95,23 @@ export default function PerspectivesSection() {
               transition={{ duration: 0.6 }}>
               <h2 className="figures-selector-title">Look Up Any Life</h2>
               <p className="figures-selector-intro">Paste any Wikipedia person page URL to visualize their life in weeks.</p>
-              <div className="wiki-search-form">
+              <form className="wiki-search-form" onSubmit={handleVisualize}>
                 <input
                   className="wiki-search-input"
                   type="url"
                   placeholder="e.g. https://en.wikipedia.org/wiki/Alan_Turing"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  disabled={searching}
                 />
-                <button className="wiki-search-btn" type="button">
-                  Visualize →
+                <button
+                  className="wiki-search-btn"
+                  type="submit"
+                  disabled={searching || !urlInput.trim()}>
+                  {searching ? "Loading…" : "Visualize →"}
                 </button>
-              </div>
+              </form>
+              {searchError && <p className="wiki-error">{searchError}</p>}
             </motion.div>
 
             <motion.div
@@ -120,7 +126,7 @@ export default function PerspectivesSection() {
                   className={`figure-selector-card ${
                     selectedFigure?.title === figure.title ? "active" : ""
                   }`}
-                  onClick={() => setSelectedFigure(figure)}
+                  onClick={() => onSelectFigure(figure)}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
