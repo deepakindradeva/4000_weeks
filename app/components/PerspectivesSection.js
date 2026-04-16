@@ -89,14 +89,18 @@ export default function PerspectivesSection() {
                     )}
                   </div>
                   <h3 className="figure-selector-name">{figure.title}</h3>
-                  <p className="figure-selector-description">{figure.description}</p>
-                  
+                  <p className="figure-selector-description">
+                    {figure.description}
+                  </p>
+
                   {figure.progress && (
                     <div className="figure-selector-weeks">
                       <div className="figure-weeks-bar">
-                        <div 
-                          className="figure-weeks-fill" 
-                          style={{ width: `${Math.min(figure.progress.progressPercent, 100)}%` }}
+                        <div
+                          className="figure-weeks-fill"
+                          style={{
+                            width: `${Math.min(figure.progress.progressPercent, 100)}%`,
+                          }}
                         />
                       </div>
                       <p className="figure-weeks-text">

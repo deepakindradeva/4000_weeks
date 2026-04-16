@@ -22,7 +22,7 @@ export default function FamousFiguresPreview() {
       try {
         setLoading(true);
         const results = [];
-        
+
         for (const url of FAMOUS_FIGURES_URLS) {
           try {
             const data = await fetchWikiLifeData(url);
@@ -37,7 +37,7 @@ export default function FamousFiguresPreview() {
             // Continue with other figures
           }
         }
-        
+
         setFigures(results);
         setError(results.length === 0 ? "Could not load figures" : null);
       } catch (err) {
@@ -112,7 +112,9 @@ export default function FamousFiguresPreview() {
                 <div className="figure-mini-overlay">
                   <div className="figure-mini-stats">
                     <div className="stat-item">
-                      <div className="stat-value">{figure.progress?.ageYears || "—"}</div>
+                      <div className="stat-value">
+                        {figure.progress?.ageYears || "—"}
+                      </div>
                       <div className="stat-label">years</div>
                     </div>
                     <div className="stat-item">
@@ -153,7 +155,8 @@ export default function FamousFiguresPreview() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, delay: 0.25 }}>
           <p>
-            Explore complete timelines, life stages, and milestones for these remarkable figures — and compare your own path.
+            Explore complete timelines, life stages, and milestones for these
+            remarkable figures — and compare your own path.
           </p>
           <a href="#life-tracker" className="figures-link-btn">
             Explore all figures →

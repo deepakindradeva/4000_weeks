@@ -42,7 +42,8 @@ const INSPIRING_FIGURES = [
   {
     title: "Maya Angelou",
     description: "American poet, memoirist, and civil rights activist",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Maya_Angelou_1994.jpg/220px-Maya_Angelou_1994.jpg",
+    thumbnail:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Maya_Angelou_1994.jpg/220px-Maya_Angelou_1994.jpg",
     articleUrl: "https://en.wikipedia.org/wiki/Maya_Angelou",
     achievements: [
       "Author of 'I Know Why the Caged Bird Sings'",
@@ -67,8 +68,10 @@ const INSPIRING_FIGURES = [
   },
   {
     title: "Nelson Mandela",
-    description: "South African anti-apartheid revolutionary and first Black president",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Nelson_Mandela-2008_%28edit%29.jpg/220px-Nelson_Mandela-2008_%28edit%29.jpg",
+    description:
+      "South African anti-apartheid revolutionary and first Black president",
+    thumbnail:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Nelson_Mandela-2008_%28edit%29.jpg/220px-Nelson_Mandela-2008_%28edit%29.jpg",
     articleUrl: "https://en.wikipedia.org/wiki/Nelson_Mandela",
     achievements: [
       "Led South Africa's anti-apartheid movement",
@@ -93,8 +96,10 @@ const INSPIRING_FIGURES = [
   },
   {
     title: "Marie Curie",
-    description: "Polish physicist and chemist, pioneer of radioactivity research",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Marie_Curie_c._1920s.jpg/220px-Marie_Curie_c._1920s.jpg",
+    description:
+      "Polish physicist and chemist, pioneer of radioactivity research",
+    thumbnail:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Marie_Curie_c._1920s.jpg/220px-Marie_Curie_c._1920s.jpg",
     articleUrl: "https://en.wikipedia.org/wiki/Marie_Curie",
     achievements: [
       "First woman to win a Nobel Prize",
@@ -119,8 +124,10 @@ const INSPIRING_FIGURES = [
   },
   {
     title: "Steve Jobs",
-    description: "Co-founder of Apple Computer and pioneer of personal computing",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/220px-Camponotus_flavomarginatus_ant.jpg",
+    description:
+      "Co-founder of Apple Computer and pioneer of personal computing",
+    thumbnail:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/220px-Camponotus_flavomarginatus_ant.jpg",
     articleUrl: "https://en.wikipedia.org/wiki/Steve_Jobs",
     achievements: [
       "Co-founded Apple Computer with Steve Wozniak",
@@ -146,7 +153,8 @@ const INSPIRING_FIGURES = [
   {
     title: "Frida Kahlo",
     description: "Mexican artist known for self-portraits and surrealist art",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/220px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg",
+    thumbnail:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/220px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg",
     articleUrl: "https://en.wikipedia.org/wiki/Frida_Kahlo",
     achievements: [
       "Created iconic surrealist and self-portrait paintings",
@@ -526,7 +534,7 @@ export default function WikipediaLifeLens() {
 
     try {
       // Simulate loading delay
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       setWikiProfile(figure);
       // Load moments for this profile
       if (figure?.title) {
@@ -572,7 +580,8 @@ export default function WikipediaLifeLens() {
           transition={{ duration: 0.6 }}>
           <h2>Measure a Life</h2>
           <p>
-            Explore inspiring life journeys—visualize the path from birth to now for remarkable figures who shaped the world.
+            Explore inspiring life journeys—visualize the path from birth to now
+            for remarkable figures who shaped the world.
           </p>
         </motion.div>
 
